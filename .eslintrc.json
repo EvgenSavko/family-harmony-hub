@@ -1,0 +1,22 @@
+{
+    "extends": [
+      "react-app", // Use CRA's ESLint config
+      "plugin:react/recommended",
+      "eslint:recommended",
+      "prettier"
+    ],
+    "plugins": ["react", "prettier"], // Keep only necessary plugins
+    "env": {
+      "browser": true,
+      "es6": true,
+      "node": true
+    },
+    "settings": {
+      "react": {
+        "version": "detect" // Automatically detect the react version
+      }
+    },
+    "rules": {
+      "prettier/prettier": "error" // Prettier rules should be error
+    }
+}
