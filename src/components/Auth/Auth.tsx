@@ -11,7 +11,7 @@ import { FirebaseError } from 'firebase/app';
 export const Auth = () => {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
-  const [isSignIn, setIsSignIn] = React.useState(false);
+  const [isSignIn, setIsSignIn] = React.useState(!!auth.currentUser?.email);
 
   const handleCreateAndLogin = async () => {
     try {
@@ -51,32 +51,36 @@ export const Auth = () => {
     await signOut(auth);
     setIsSignIn(false);
   };
-
+  console.log('isSignIn', isSignIn);
   return (
     <>
-      <input
-        placeholder="Email..."
-        onChange={(e) => setEmail(e.target.value)}
-        value={email}
-      />
-      <input
-        placeholder="Passwon..."
-        type="password"
-        onChange={(e) => setPassword(e.target.value)}
-        value={password}
-      />
-
-      {isSignIn && (
-        <h2 style={{ color: 'white' }}>{auth.currentUser?.email}</h2>
+      {!isSignIn && (
+        <>
+          <input
+            placeholder="Email..."
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
+          />
+          <input
+            placeholder="Passwon..."
+            type="password"
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
+          />
+          <div>
+            <button onClick={handleCreateAndLogin}>Create and login</button>
+            <button onClick={handledLogin}>Login</button>
+            <button onClick={handleLoginWithGoogle}>Login with Google</button>
+          </div>
+        </>
       )}
 
-      <div>
-        <button onClick={handleCreateAndLogin}>create and login</button>
-        <button onClick={handledLogin}>login</button>
-        <button onClick={handleSignOut}>signOut</button>
-      </div>
-      <br />
-      <button onClick={handleLoginWithGoogle}>Login with Google</button>
+      {isSignIn && (
+        <>
+          <h2>{auth.currentUser?.email}</h2>
+          <button onClick={handleSignOut}>signOut</button>
+        </>
+      )}
     </>
   );
 };
