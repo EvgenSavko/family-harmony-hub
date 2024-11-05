@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { auth, db } from '../../../../firebase';
 import { getDoc, getDocs, doc, collection } from 'firebase/firestore';
 import { FirebaseError } from 'firebase/app';
+import { AddMembers } from '../AddMembers';
 
 const familyDataDefault = { number: 0, description: '', owner_email: '' };
 
@@ -81,6 +82,8 @@ export const MyFamily = ({
 
   console.log('familyData', familyData);
 
+  const currentUserIsOwner = userEmail === familyData.owner_email;
+
   if (!isMyFamilyExist)
     return (
       <div style={{ border: '1px solid blue' }}>
@@ -92,10 +95,12 @@ export const MyFamily = ({
     <div style={{ border: '1px solid blue' }}>
       <h2>MyFamily</h2>
       <>
-        <h3>{familyId}</h3>
-        <h3>{familyData.number > 0 && familyData.number}</h3>
-        <h3>{familyData.description}</h3>
+        <h3>Owner is: {familyId}</h3>
+        <h3>Family #: {familyData.number > 0 && familyData.number}</h3>
+        <h3>Description: {familyData.description}</h3>
       </>
+      <br />
+      {currentUserIsOwner && <AddMembers familyId={familyId} />}
     </div>
   );
 };
