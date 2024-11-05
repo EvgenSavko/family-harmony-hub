@@ -1,5 +1,5 @@
 import React from 'react';
-import { Auth, Page } from '../../components';
+import { Auth, Page, CreateFamily, MyFamily } from '../../components';
 
 export const Home = () => {
   return (
@@ -7,6 +7,8 @@ export const Home = () => {
       <h3>Home</h3>
       <br />
       <Auth />
+      <CreateFamily />
+      <MyFamily />
     </Page>
   );
 };
