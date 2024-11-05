@@ -9,10 +9,14 @@ import {
 import { FirebaseError } from 'firebase/app';
 import { doc, setDoc } from 'firebase/firestore';
 
-export const Auth = () => {
+type AuthProps = {
+  setIsSignIn: React.Dispatch<React.SetStateAction<boolean>>;
+  isSignIn: boolean;
+};
+
+export const Auth = ({ setIsSignIn, isSignIn }: AuthProps) => {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
-  const [isSignIn, setIsSignIn] = React.useState(!!auth.currentUser?.email);
 
   const handleCreateAndLogin = async () => {
     try {
@@ -22,17 +26,16 @@ export const Auth = () => {
       const docRef = doc(db, 'users', userID);
 
       await setDoc(docRef, {
-        owner_email: '',
         user_email: email,
+        family_id: '',
       });
-
       setEmail('');
       setPassword('');
 
       setIsSignIn(true);
     } catch (error) {
       const firebaseError = error as FirebaseError;
-      console.log('error', firebaseError?.message);
+      console.error('error', firebaseError?.message);
     }
   };
 
@@ -44,7 +47,7 @@ export const Auth = () => {
       setIsSignIn(true);
     } catch (error) {
       const firebaseError = error as FirebaseError;
-      console.log('error', firebaseError?.message);
+      console.error('error', firebaseError?.message);
     }
   };
 
@@ -56,15 +59,15 @@ export const Auth = () => {
       if (userID) {
         const docRef = doc(db, 'users', userID);
         await setDoc(docRef, {
-          owner_email: '',
-          user_email: email,
+          family_id: '',
+          user_email: userID,
         });
       }
 
       setIsSignIn(true);
     } catch (error) {
       const firebaseError = error as FirebaseError;
-      console.log('error', firebaseError?.message);
+      console.error('error', firebaseError?.message);
     }
   };
 
@@ -98,7 +101,7 @@ export const Auth = () => {
 
       {isSignIn && (
         <>
-          <h2>{auth.currentUser?.email}</h2>
+          <h2>Email: {auth.currentUser?.email}</h2>
           <button onClick={handleSignOut}>signOut</button>
         </>
       )}
