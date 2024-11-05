@@ -1,5 +1,5 @@
 import React from 'react';
-import { auth, googleProvider } from '../../firebase';
+import { auth, googleProvider, db } from '../../firebase';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -7,6 +7,7 @@ import {
   signInWithPopup,
 } from 'firebase/auth';
 import { FirebaseError } from 'firebase/app';
+import { doc, setDoc } from 'firebase/firestore';
 
 export const Auth = () => {
   const [email, setEmail] = React.useState('');
@@ -16,8 +17,18 @@ export const Auth = () => {
   const handleCreateAndLogin = async () => {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
+
+      const userID = email;
+      const docRef = doc(db, 'users', userID);
+
+      await setDoc(docRef, {
+        owner_email: '',
+        user_email: email,
+      });
+
       setEmail('');
       setPassword('');
+
       setIsSignIn(true);
     } catch (error) {
       const firebaseError = error as FirebaseError;
@@ -39,7 +50,17 @@ export const Auth = () => {
 
   const handleLoginWithGoogle = async () => {
     try {
-      await signInWithPopup(auth, googleProvider);
+      const google = await signInWithPopup(auth, googleProvider);
+      const userID = await google.user.email;
+
+      if (userID) {
+        const docRef = doc(db, 'users', userID);
+        await setDoc(docRef, {
+          owner_email: '',
+          user_email: email,
+        });
+      }
+
       setIsSignIn(true);
     } catch (error) {
       const firebaseError = error as FirebaseError;

@@ -8,7 +8,7 @@ function App() {
     <div className="App">
       <Router>
         <div>
-          <nav>
+          <nav style={{ float: 'inline-start' }}>
             <ul>
               <li>
                 <Link to="/">Home</Link>
