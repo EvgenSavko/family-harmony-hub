@@ -75,7 +75,7 @@ export const Auth = ({ setIsSignIn, isSignIn }: AuthProps) => {
     await signOut(auth);
     setIsSignIn(false);
   };
-  console.log('isSignIn', isSignIn);
+
   return (
     <>
       {!isSignIn && (

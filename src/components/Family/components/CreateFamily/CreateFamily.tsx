@@ -5,11 +5,13 @@ import { doc, setDoc, updateDoc } from 'firebase/firestore';
 type CreateFamilyProps = {
   setIsMyFamilyExist: React.Dispatch<React.SetStateAction<boolean>>;
   isMyFamilyExist: boolean;
+  isSignIn: boolean;
 };
 
 export const CreateFamily = ({
   setIsMyFamilyExist,
   isMyFamilyExist,
+  isSignIn,
 }: CreateFamilyProps) => {
   const [description, setDescription] = React.useState('');
   const [number, setNumber] = React.useState('');
@@ -37,6 +39,8 @@ export const CreateFamily = ({
       setIsMyFamilyExist(true);
     }
   };
+
+  if (!isSignIn) return null;
 
   if (isMyFamilyExist)
     return (

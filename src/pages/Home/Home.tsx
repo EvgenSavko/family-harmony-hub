@@ -6,6 +6,8 @@ export const Home = () => {
   const [isSignIn, setIsSignIn] = React.useState(!!auth.currentUser?.email);
   const [isMyFamilyExist, setIsMyFamilyExist] = React.useState(false);
 
+  console.log('isMyFamilyExist', isMyFamilyExist);
+  console.log('isSignIn', isSignIn);
   return (
     <Page isHomePage>
       <h3>Home</h3>
@@ -13,19 +15,18 @@ export const Home = () => {
       <Auth setIsSignIn={setIsSignIn} isSignIn={isSignIn} />
       <br />
       <br />
-      {isSignIn && (
-        <>
-          <CreateFamily
-            isMyFamilyExist={isMyFamilyExist}
-            setIsMyFamilyExist={setIsMyFamilyExist}
-          />
 
-          <MyFamily
-            isMyFamilyExist={isMyFamilyExist}
-            setIsMyFamilyExist={setIsMyFamilyExist}
-          />
-        </>
-      )}
+      <CreateFamily
+        isSignIn={isSignIn}
+        isMyFamilyExist={isMyFamilyExist}
+        setIsMyFamilyExist={setIsMyFamilyExist}
+      />
+
+      <MyFamily
+        isSignIn={isSignIn}
+        isMyFamilyExist={isMyFamilyExist}
+        setIsMyFamilyExist={setIsMyFamilyExist}
+      />
     </Page>
   );
 };

@@ -15,11 +15,13 @@ interface FamilyDataProps {
 type MyFamilyProps = {
   setIsMyFamilyExist: React.Dispatch<React.SetStateAction<boolean>>;
   isMyFamilyExist: boolean;
+  isSignIn: boolean;
 };
 
 export const MyFamily = ({
   isMyFamilyExist,
   setIsMyFamilyExist,
+  isSignIn,
 }: MyFamilyProps) => {
   const userEmail = auth.currentUser?.email;
   const [familyId, setFamilyId] = useState('');
@@ -39,20 +41,25 @@ export const MyFamily = ({
     };
 
     getUser();
-  }, [userEmail]);
+  }, [userEmail, isSignIn]);
 
   useEffect(() => {
     const getFamily = async () => {
       try {
-        const userRef = doc(db, 'families', familyId);
-        const userSnap = await getDoc(userRef);
-        if (userSnap.exists()) {
-          setFamilyData({
-            description: userSnap.data().description,
-            number: userSnap.data().number,
-            owner_email: familyId,
-          });
-          setIsMyFamilyExist(true);
+        if (familyId) {
+          const userRef = doc(db, 'families', familyId);
+          const userSnap = await getDoc(userRef);
+
+          if (userSnap.exists()) {
+            setFamilyData({
+              description: userSnap.data().description,
+              number: userSnap.data().number,
+              owner_email: familyId,
+            });
+            setIsMyFamilyExist(true);
+          }
+        } else {
+          setIsMyFamilyExist(false);
         }
       } catch (error) {
         const firebaseError = error as FirebaseError;
@@ -78,11 +85,13 @@ export const MyFamily = ({
 
     getFamily();
     getFamilies();
-  }, [familyId, isMyFamilyExist]);
+  }, [familyId, isMyFamilyExist, isSignIn]);
 
-  console.log('familyData', familyData);
+  //   console.log('familyData', familyData);
 
   const currentUserIsOwner = userEmail === familyData.owner_email;
+
+  if (!isSignIn) return null;
 
   if (!isMyFamilyExist)
     return (
