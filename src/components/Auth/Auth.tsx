@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { auth, googleProvider, db } from '../../firebase';
+import { onAuthStateChanged } from 'firebase/auth';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -75,6 +76,18 @@ export const Auth = ({ setIsSignIn, isSignIn }: AuthProps) => {
     await signOut(auth);
     setIsSignIn(false);
   };
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setIsSignIn(true);
+      } else {
+        setIsSignIn(false);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   return (
     <>

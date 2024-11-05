@@ -6,8 +6,6 @@ export const Home = () => {
   const [isSignIn, setIsSignIn] = React.useState(!!auth.currentUser?.email);
   const [isMyFamilyExist, setIsMyFamilyExist] = React.useState(false);
 
-  console.log('isMyFamilyExist', isMyFamilyExist);
-  console.log('isSignIn', isSignIn);
   return (
     <Page isHomePage>
       <h3>Home</h3>
