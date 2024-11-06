@@ -8,11 +8,13 @@ import {
 } from 'firebase/auth';
 import { FirebaseError } from 'firebase/app';
 import { doc, setDoc } from 'firebase/firestore';
+import { useRerenderOnAuthStateChanged } from '../../shared';
 
 export const Auth = () => {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
-  const [isSignIn, setIsSignIn] = React.useState(!!auth.currentUser?.email);
+
+  const { isSignIn } = useRerenderOnAuthStateChanged();
 
   const handleCreateAndLogin = async () => {
     try {
@@ -22,17 +24,14 @@ export const Auth = () => {
       const docRef = doc(db, 'users', userID);
 
       await setDoc(docRef, {
-        owner_email: '',
         user_email: email,
+        family_id: '',
       });
-
       setEmail('');
       setPassword('');
-
-      setIsSignIn(true);
     } catch (error) {
       const firebaseError = error as FirebaseError;
-      console.log('error', firebaseError?.message);
+      console.error('error', firebaseError?.message);
     }
   };
 
@@ -41,10 +40,9 @@ export const Auth = () => {
       await signInWithEmailAndPassword(auth, email, password);
       setEmail('');
       setPassword('');
-      setIsSignIn(true);
     } catch (error) {
       const firebaseError = error as FirebaseError;
-      console.log('error', firebaseError?.message);
+      console.error('error', firebaseError?.message);
     }
   };
 
@@ -56,23 +54,20 @@ export const Auth = () => {
       if (userID) {
         const docRef = doc(db, 'users', userID);
         await setDoc(docRef, {
-          owner_email: '',
-          user_email: email,
+          family_id: '',
+          user_email: userID,
         });
       }
-
-      setIsSignIn(true);
     } catch (error) {
       const firebaseError = error as FirebaseError;
-      console.log('error', firebaseError?.message);
+      console.error('error', firebaseError?.message);
     }
   };
 
   const handleSignOut = async () => {
     await signOut(auth);
-    setIsSignIn(false);
   };
-  console.log('isSignIn', isSignIn);
+
   return (
     <>
       {!isSignIn && (
@@ -98,7 +93,7 @@ export const Auth = () => {
 
       {isSignIn && (
         <>
-          <h2>{auth.currentUser?.email}</h2>
+          <h2>Email: {auth.currentUser?.email}</h2>
           <button onClick={handleSignOut}>signOut</button>
         </>
       )}
