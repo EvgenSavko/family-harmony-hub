@@ -5,12 +5,17 @@ import { doc, updateDoc } from 'firebase/firestore';
 
 interface AddMembersProps {
   familyId: string;
+  setIsAddMembersLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const AddMembers = ({ familyId }: AddMembersProps) => {
+export const AddMembers = ({
+  familyId,
+  setIsAddMembersLoading,
+}: AddMembersProps) => {
   const [member, setMember] = useState('');
   const [members, setMembers] = useState<Array<string>>([]);
   const [isReadyToAddToFamily, setIsReadyToAddToFamily] = useState(false);
+  const ownerEmail = familyId;
 
   const handleAddMemberToFamily = () => {
     setIsReadyToAddToFamily(true);
@@ -22,7 +27,20 @@ export const AddMembers = ({ familyId }: AddMembersProps) => {
   };
 
   useEffect(() => {
+    // Add family_members of this
+    const updateFamilyAddNewMembers = async () => {
+      const docFamiliesRef = doc(db, 'families', familyId);
+
+      await updateDoc(docFamiliesRef, {
+        family_members: [...members, ownerEmail],
+      });
+
+      setIsAddMembersLoading(false);
+    };
+
+    // Add family_id of the family that they were assigned to
     const updateUsers = async () => {
+      setIsAddMembersLoading(true);
       members.forEach(async (userEmail) => {
         const docUsersRef = doc(db, 'users', userEmail);
 
@@ -31,12 +49,13 @@ export const AddMembers = ({ familyId }: AddMembersProps) => {
         });
       });
 
-      console.log('Finished with Assign new Members!');
       setIsReadyToAddToFamily(false);
     };
 
     if (isReadyToAddToFamily) {
       updateUsers();
+      updateFamilyAddNewMembers();
+      setMembers([]);
     }
   }, [members, isReadyToAddToFamily]);
 
