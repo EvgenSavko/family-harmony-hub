@@ -7,7 +7,7 @@ import {
   signInWithPopup,
 } from 'firebase/auth';
 import { FirebaseError } from 'firebase/app';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { useRerenderOnAuthStateChanged } from '../../shared';
 
 export const Auth = () => {
@@ -53,10 +53,15 @@ export const Auth = () => {
 
       if (userID) {
         const docRef = doc(db, 'users', userID);
-        await setDoc(docRef, {
-          family_id: '',
-          user_email: userID,
-        });
+
+        const userSnap = await getDoc(docRef);
+
+        if (!userSnap.exists()) {
+          await setDoc(docRef, {
+            family_id: '',
+            user_email: userID,
+          });
+        }
       }
     } catch (error) {
       const firebaseError = error as FirebaseError;
