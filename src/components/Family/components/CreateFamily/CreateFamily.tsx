@@ -4,17 +4,22 @@ import { doc, setDoc, updateDoc } from 'firebase/firestore';
 
 type CreateFamilyProps = {
   setIsMyFamilyExist: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   isMyFamilyExist: boolean;
+  isSignIn: boolean;
 };
 
 export const CreateFamily = ({
   setIsMyFamilyExist,
+  setIsLoading,
   isMyFamilyExist,
+  isSignIn,
 }: CreateFamilyProps) => {
   const [description, setDescription] = React.useState('');
   const [number, setNumber] = React.useState('');
 
   const handleCreateFamily = async () => {
+    setIsLoading(true);
     const familyID = auth.currentUser?.email;
     const ownerEmail = auth.currentUser?.email;
 
@@ -24,6 +29,7 @@ export const CreateFamily = ({
         number: +number,
         owner_email: ownerEmail,
         description: description,
+        family_members: [ownerEmail],
       });
 
       const docUsersRef = doc(db, 'users', ownerEmail);
@@ -35,8 +41,11 @@ export const CreateFamily = ({
       setDescription('');
       setNumber('');
       setIsMyFamilyExist(true);
+      setIsLoading(false);
     }
   };
+
+  if (!isSignIn) return null;
 
   if (isMyFamilyExist)
     return (

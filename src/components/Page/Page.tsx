@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { auth } from '../../firebase';
+import { useRerenderOnAuthStateChanged } from '../../shared';
 
 type PageProps = {
   isHomePage?: boolean;
@@ -7,6 +7,8 @@ type PageProps = {
 };
 
 export const Page = ({ isHomePage, children }: PageProps) => {
-  if (!auth.currentUser?.email && !isHomePage) return <p>Please authorize</p>;
+  const { isSignIn } = useRerenderOnAuthStateChanged();
+
+  if (!isSignIn && !isHomePage) return <p>Please authorize</p>;
   return <div>{children}</div>;
 };

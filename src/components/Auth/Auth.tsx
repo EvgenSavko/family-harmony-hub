@@ -8,15 +8,13 @@ import {
 } from 'firebase/auth';
 import { FirebaseError } from 'firebase/app';
 import { doc, setDoc } from 'firebase/firestore';
+import { useRerenderOnAuthStateChanged } from '../../shared';
 
-type AuthProps = {
-  setIsSignIn: React.Dispatch<React.SetStateAction<boolean>>;
-  isSignIn: boolean;
-};
-
-export const Auth = ({ setIsSignIn, isSignIn }: AuthProps) => {
+export const Auth = () => {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
+
+  const { isSignIn } = useRerenderOnAuthStateChanged();
 
   const handleCreateAndLogin = async () => {
     try {
@@ -31,8 +29,6 @@ export const Auth = ({ setIsSignIn, isSignIn }: AuthProps) => {
       });
       setEmail('');
       setPassword('');
-
-      setIsSignIn(true);
     } catch (error) {
       const firebaseError = error as FirebaseError;
       console.error('error', firebaseError?.message);
@@ -44,7 +40,6 @@ export const Auth = ({ setIsSignIn, isSignIn }: AuthProps) => {
       await signInWithEmailAndPassword(auth, email, password);
       setEmail('');
       setPassword('');
-      setIsSignIn(true);
     } catch (error) {
       const firebaseError = error as FirebaseError;
       console.error('error', firebaseError?.message);
@@ -63,8 +58,6 @@ export const Auth = ({ setIsSignIn, isSignIn }: AuthProps) => {
           user_email: userID,
         });
       }
-
-      setIsSignIn(true);
     } catch (error) {
       const firebaseError = error as FirebaseError;
       console.error('error', firebaseError?.message);
@@ -73,9 +66,8 @@ export const Auth = ({ setIsSignIn, isSignIn }: AuthProps) => {
 
   const handleSignOut = async () => {
     await signOut(auth);
-    setIsSignIn(false);
   };
-  console.log('isSignIn', isSignIn);
+
   return (
     <>
       {!isSignIn && (
