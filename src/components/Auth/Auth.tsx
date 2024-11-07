@@ -9,12 +9,9 @@ import {
 import { FirebaseError } from 'firebase/app';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { useRerenderOnAuthStateChanged } from '../../shared';
+import Button from '@mui/material/Button';
 
-type AouthProps = {
-  setIsMyFamilyExist: React.Dispatch<React.SetStateAction<boolean>>;
-};
-
-export const Auth = ({ setIsMyFamilyExist }: AouthProps) => {
+export const Auth = () => {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
@@ -75,7 +72,6 @@ export const Auth = ({ setIsMyFamilyExist }: AouthProps) => {
 
   const handleSignOut = async () => {
     await signOut(auth);
-    setIsMyFamilyExist(false);
   };
 
   return (
@@ -94,9 +90,15 @@ export const Auth = ({ setIsMyFamilyExist }: AouthProps) => {
             value={password}
           />
           <div>
-            <button onClick={handleCreateAndLogin}>Create and login</button>
-            <button onClick={handledLogin}>Login</button>
-            <button onClick={handleLoginWithGoogle}>Login with Google</button>
+            <Button variant="contained" onClick={handleCreateAndLogin}>
+              Create and login
+            </Button>
+            <Button variant="contained" onClick={handledLogin}>
+              Login
+            </Button>
+            <Button variant="contained" onClick={handleLoginWithGoogle}>
+              Login with Google
+            </Button>
           </div>
         </>
       )}
@@ -104,7 +106,9 @@ export const Auth = ({ setIsMyFamilyExist }: AouthProps) => {
       {isSignIn && (
         <>
           <h2>Email: {auth.currentUser?.email}</h2>
-          <button onClick={handleSignOut}>signOut</button>
+          <Button variant="contained" onClick={handleSignOut}>
+            signOut
+          </Button>
         </>
       )}
     </>

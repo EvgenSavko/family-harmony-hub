@@ -93,6 +93,12 @@ export const MyFamily = ({
     getFamilies();
   }, [familyId, isMyFamilyExist, isSignIn, isAddMembersLoading]);
 
+  useEffect(() => {
+    return () => {
+      setIsMyFamilyExist(false);
+    };
+  }, []);
+
   //   console.log('familyData', familyData);
 
   const currentUserIsOwner = userEmail === familyData.ownerEmail;
