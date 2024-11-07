@@ -7,10 +7,14 @@ import {
   signInWithPopup,
 } from 'firebase/auth';
 import { FirebaseError } from 'firebase/app';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { useRerenderOnAuthStateChanged } from '../../shared';
 
-export const Auth = () => {
+type AouthProps = {
+  setIsMyFamilyExist: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+export const Auth = ({ setIsMyFamilyExist }: AouthProps) => {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
@@ -53,10 +57,15 @@ export const Auth = () => {
 
       if (userID) {
         const docRef = doc(db, 'users', userID);
-        await setDoc(docRef, {
-          family_id: '',
-          user_email: userID,
-        });
+
+        const userSnap = await getDoc(docRef);
+
+        if (!userSnap.exists()) {
+          await setDoc(docRef, {
+            family_id: '',
+            user_email: userID,
+          });
+        }
       }
     } catch (error) {
       const firebaseError = error as FirebaseError;
@@ -66,6 +75,7 @@ export const Auth = () => {
 
   const handleSignOut = async () => {
     await signOut(auth);
+    setIsMyFamilyExist(false);
   };
 
   return (

@@ -97,8 +97,6 @@ export const MyFamily = ({
 
   const currentUserIsOwner = userEmail === familyData.ownerEmail;
 
-  if (!isSignIn) return null;
-
   if (!isMyFamilyExist)
     return (
       <div style={{ border: '1px solid blue' }}>
