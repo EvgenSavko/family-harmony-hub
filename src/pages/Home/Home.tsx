@@ -11,7 +11,7 @@ export const Home = () => {
     <Page isHomePage>
       <h3>Home</h3>
       <br />
-      <Auth setIsMyFamilyExist={setIsMyFamilyExist} />
+      <Auth />
       <br />
       {isLoading && <h1>Loading....</h1>}
       <br />
