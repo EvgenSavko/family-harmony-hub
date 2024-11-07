@@ -1,41 +1,42 @@
 import React from 'react';
-import { Button, Container, Box, Typography } from '@mui/material';
+import { Button, Container, Box, Typography, Paper } from '@mui/material';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../firebase';
 import { useRerenderOnAuthStateChanged } from '../../shared';
+import { useNavigate } from 'react-router-dom';
 
 export const Header = () => {
   const { isSignIn } = useRerenderOnAuthStateChanged();
+  const navigate = useNavigate();
 
   const handleSignOut = async () => {
     await signOut(auth);
+    navigate('/');
   };
 
   if (!isSignIn) return null;
 
   return (
-    <Container
-      disableGutters
-      maxWidth="xl"
-      sx={{ bgcolor: 'background.default', color: 'text.primary' }}
-    >
-      <Container
-        maxWidth="xl"
-        sx={{
-          p: 2,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}
-      >
-        <Box>
-          <Typography variant="h6">Full size header</Typography>
-        </Box>
+    <Container disableGutters maxWidth="xl">
+      <Paper elevation={1} sx={{ borderRadius: '0' }}>
+        <Container
+          maxWidth="xl"
+          sx={{
+            p: 2,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
+        >
+          <Box>
+            <Typography variant="h6">Full size header</Typography>
+          </Box>
 
-        <Button variant="contained" onClick={handleSignOut}>
-          Sign Out
-        </Button>
-      </Container>
+          <Button variant="contained" onClick={handleSignOut}>
+            Sign Out
+          </Button>
+        </Container>
+      </Paper>
     </Container>
   );
 };

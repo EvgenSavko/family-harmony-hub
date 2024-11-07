@@ -1,21 +1,34 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { auth, googleProvider, db } from '../../firebase';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  signOut,
   signInWithPopup,
 } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
 import { FirebaseError } from 'firebase/app';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { useRerenderOnAuthStateChanged } from '../../shared';
-import Button from '@mui/material/Button';
+import {
+  Button,
+  Container,
+  Paper,
+  Grid2,
+  ButtonGroup,
+  TextField,
+} from '@mui/material';
 
 export const Auth = () => {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
-
+  const navigate = useNavigate();
   const { isSignIn } = useRerenderOnAuthStateChanged();
+
+  useEffect(() => {
+    if (isSignIn) {
+      navigate('/home');
+    }
+  }, [isSignIn]);
 
   const handleCreateAndLogin = async () => {
     try {
@@ -70,46 +83,75 @@ export const Auth = () => {
     }
   };
 
-  const handleSignOut = async () => {
-    await signOut(auth);
-  };
-
   return (
     <>
       {!isSignIn && (
-        <>
-          <input
-            placeholder="Email..."
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
-          />
-          <input
-            placeholder="Passwon..."
-            type="password"
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
-          />
-          <div>
-            <Button variant="contained" onClick={handleCreateAndLogin}>
-              Create and login
-            </Button>
-            <Button variant="contained" onClick={handledLogin}>
-              Login
-            </Button>
-            <Button variant="contained" onClick={handleLoginWithGoogle}>
-              Login with Google
-            </Button>
-          </div>
-        </>
-      )}
-
-      {isSignIn && (
-        <>
-          <h2>Email: {auth.currentUser?.email}</h2>
-          <Button variant="contained" onClick={handleSignOut}>
-            signOut
-          </Button>
-        </>
+        <Container disableGutters maxWidth="xl">
+          <Paper elevation={1} sx={{ borderRadius: '0' }}>
+            <Grid2
+              container
+              justifyContent="center"
+              alignItems="center"
+              // flexDirection={{ xs: 'column' }}
+              sx={{
+                fontSize: '12px',
+                padding: '9rem 0',
+              }}
+              size={12}
+            >
+              <Grid2>
+                <TextField
+                  id="login-email"
+                  label="Email"
+                  type="email"
+                  variant="standard"
+                  onChange={(e) => setEmail(e.target.value)}
+                  value={email}
+                />
+              </Grid2>
+              <Grid2>
+                <TextField
+                  id="login-password"
+                  label="Password"
+                  type="password"
+                  variant="standard"
+                  onChange={(e) => setPassword(e.target.value)}
+                  value={password}
+                />
+              </Grid2>
+              <Grid2
+                container
+                justifyContent="center"
+                alignItems="center"
+                flexDirection="column"
+                sx={{ marginLeft: '2rem' }}
+              >
+                <ButtonGroup variant="text" aria-label="Basic button group">
+                  <Button onClick={handleCreateAndLogin}>Sign up</Button>
+                  <Button onClick={handledLogin}>Sign in</Button>
+                  <Button onClick={handleLoginWithGoogle}>
+                    Sign ip with Google
+                  </Button>
+                </ButtonGroup>
+              </Grid2>
+              {/* <Grid2>
+                <Button variant="outlined" onClick={handleCreateAndLogin}>
+                  Sign up
+                </Button>
+              </Grid2>
+              <Grid2>
+                <Button variant="outlined" onClick={handledLogin}>
+                  Sign ip
+                </Button>
+              </Grid2>
+              <Grid2>
+                <Button variant="outlined" onClick={handleLoginWithGoogle}>
+                  Sign ip with Google
+                </Button>
+              </Grid2> */}
+            </Grid2>
+          </Paper>
+        </Container>
       )}
     </>
   );
