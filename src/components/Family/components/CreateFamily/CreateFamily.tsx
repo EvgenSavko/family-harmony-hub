@@ -6,14 +6,12 @@ type CreateFamilyProps = {
   setIsMyFamilyExist: React.Dispatch<React.SetStateAction<boolean>>;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   isMyFamilyExist: boolean;
-  isSignIn: boolean;
 };
 
 export const CreateFamily = ({
   setIsMyFamilyExist,
   setIsLoading,
   isMyFamilyExist,
-  isSignIn,
 }: CreateFamilyProps) => {
   const [description, setDescription] = React.useState('');
   const [number, setNumber] = React.useState('');
@@ -44,8 +42,6 @@ export const CreateFamily = ({
       setIsLoading(false);
     }
   };
-
-  if (!isSignIn) return null;
 
   if (isMyFamilyExist)
     return (

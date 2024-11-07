@@ -11,21 +11,24 @@ export const Home = () => {
     <Page isHomePage>
       <h3>Home</h3>
       <br />
-      <Auth />
+      <Auth setIsMyFamilyExist={setIsMyFamilyExist} />
       <br />
       {isLoading && <h1>Loading....</h1>}
       <br />
-      <CreateFamily
-        isSignIn={isSignIn}
-        isMyFamilyExist={isMyFamilyExist}
-        setIsMyFamilyExist={setIsMyFamilyExist}
-        setIsLoading={setIsLoading}
-      />
-      <MyFamily
-        isSignIn={isSignIn}
-        isMyFamilyExist={isMyFamilyExist}
-        setIsMyFamilyExist={setIsMyFamilyExist}
-      />
+      {isSignIn && (
+        <CreateFamily
+          isMyFamilyExist={isMyFamilyExist}
+          setIsMyFamilyExist={setIsMyFamilyExist}
+          setIsLoading={setIsLoading}
+        />
+      )}
+      {isSignIn && (
+        <MyFamily
+          isSignIn={isSignIn}
+          isMyFamilyExist={isMyFamilyExist}
+          setIsMyFamilyExist={setIsMyFamilyExist}
+        />
+      )}
     </Page>
   );
 };

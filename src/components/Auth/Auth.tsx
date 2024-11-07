@@ -10,7 +10,11 @@ import { FirebaseError } from 'firebase/app';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { useRerenderOnAuthStateChanged } from '../../shared';
 
-export const Auth = () => {
+type AouthProps = {
+  setIsMyFamilyExist: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+export const Auth = ({ setIsMyFamilyExist }: AouthProps) => {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
@@ -71,6 +75,7 @@ export const Auth = () => {
 
   const handleSignOut = async () => {
     await signOut(auth);
+    setIsMyFamilyExist(false);
   };
 
   return (
