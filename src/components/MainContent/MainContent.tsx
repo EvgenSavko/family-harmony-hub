@@ -1,39 +1,59 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { Home, Contact, About } from '../../pages';
-import { ThemeToggle } from '../ThemeToggle';
-import { Header } from '../Header';
-import Container from '@mui/material/Container';
+import { ThemeToggle, Header, Auth } from '../../components';
+import { useRerenderOnAuthStateChanged } from '../../shared';
+import { Container, Paper, Link as UILink } from '@mui/material';
 
 export const MainContent = () => {
+  const { isSignIn } = useRerenderOnAuthStateChanged();
+
   return (
-    <div className="App">
-      <Header />
-      <Container maxWidth="xl">
-        <Router>
-          <div>
-            <nav style={{ float: 'inline-start' }}>
-              <ul>
-                <li>
-                  <Link to="/home">Home</Link>
-                </li>
-                <li>
-                  <Link to="/about">About</Link>
-                </li>
-                <li>
-                  <Link to="/contact">Contact</Link>
-                </li>
-              </ul>
-            </nav>
-            <Routes>
-              <Route path="/home" element={<Home />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/contact" element={<Contact />} />
-            </Routes>
-          </div>
-        </Router>
-      </Container>
-      <ThemeToggle />
-    </div>
+    <Router>
+      <div className="App">
+        <Paper elevation={0}>
+          <Header />
+          <Routes>
+            <Route path="/" element={<Auth />} />
+          </Routes>
+          <Container maxWidth="xl">
+            <>
+              {isSignIn && (
+                <nav style={{ float: 'inline-start' }}>
+                  <ul>
+                    <li>
+                      <Link to="/">
+                        <UILink>Login</UILink>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/home">
+                        <UILink>Home</UILink>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/about">
+                        <UILink>About</UILink>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/contact">
+                        <UILink>Contact</UILink>
+                      </Link>
+                    </li>
+                  </ul>
+                </nav>
+              )}
+              <Routes>
+                <Route path="/home" element={<Home />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/contact" element={<Contact />} />
+              </Routes>
+            </>
+          </Container>
+          <ThemeToggle />
+        </Paper>
+      </div>
+    </Router>
   );
 };

@@ -1,6 +1,7 @@
 import React from 'react';
-import { Auth, Page, CreateFamily, MyFamily } from '../../components';
+import { Page, CreateFamily, MyFamily } from '../../components';
 import { useRerenderOnAuthStateChanged } from '../../shared';
+import { auth } from '../../firebase';
 
 export const Home = () => {
   const [isMyFamilyExist, setIsMyFamilyExist] = React.useState(false);
@@ -10,8 +11,7 @@ export const Home = () => {
   return (
     <Page isHomePage>
       <h3>Home</h3>
-      <br />
-      <Auth />
+      <h2>Email: {auth.currentUser?.email}</h2>
       <br />
       {isLoading && <h1>Loading....</h1>}
       <br />
