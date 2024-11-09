@@ -17,26 +17,24 @@ export const Header = () => {
   if (!isSignIn) return null;
 
   return (
-    <Container disableGutters maxWidth="xl">
-      <Paper elevation={1} sx={{ borderRadius: '0' }}>
-        <Container
-          maxWidth="xl"
-          sx={{
-            p: 2,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}
-        >
-          <Box>
-            <Typography variant="h6">Full size header</Typography>
-          </Box>
+    <Paper elevation={1} sx={{ borderRadius: '0' }}>
+      <Container
+        maxWidth="xl"
+        sx={{
+          p: 2,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
+      >
+        <Box>
+          <Typography variant="h6">Full size header</Typography>
+        </Box>
 
-          <Button variant="contained" onClick={handleSignOut}>
-            Sign Out
-          </Button>
-        </Container>
-      </Paper>
-    </Container>
+        <Button variant="contained" onClick={handleSignOut}>
+          Sign Out
+        </Button>
+      </Container>
+    </Paper>
   );
 };

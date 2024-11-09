@@ -16,11 +16,16 @@ import {
   Grid2,
   ButtonGroup,
   TextField,
+  Typography,
+  Box,
 } from '@mui/material';
+import LockOpenIcon from '@mui/icons-material/LockOpen';
 
 export const Auth = () => {
   const [email, setEmail] = React.useState('');
+  const [emailError, setEmailError] = React.useState(false);
   const [password, setPassword] = React.useState('');
+  const [passwordError, setPasswordError] = React.useState(false);
   const navigate = useNavigate();
   const { isSignIn } = useRerenderOnAuthStateChanged();
 
@@ -31,32 +36,55 @@ export const Auth = () => {
   }, [isSignIn]);
 
   const handleCreateAndLogin = async () => {
-    try {
-      await createUserWithEmailAndPassword(auth, email, password);
+    if (!email) {
+      setEmailError(true);
+    }
+    if (!password) {
+      setPasswordError(true);
+    }
 
-      const userID = email;
-      const docRef = doc(db, 'users', userID);
+    if (email && password) {
+      setEmailError(false);
+      setPasswordError(false);
 
-      await setDoc(docRef, {
-        user_email: email,
-        family_id: '',
-      });
-      setEmail('');
-      setPassword('');
-    } catch (error) {
-      const firebaseError = error as FirebaseError;
-      console.error('error', firebaseError?.message);
+      try {
+        await createUserWithEmailAndPassword(auth, email, password);
+
+        const userID = email;
+        const docRef = doc(db, 'users', userID);
+
+        await setDoc(docRef, {
+          user_email: email,
+          family_id: '',
+        });
+        setEmail('');
+        setPassword('');
+      } catch (error) {
+        const firebaseError = error as FirebaseError;
+        console.error('error', firebaseError?.message);
+      }
     }
   };
 
   const handledLogin = async () => {
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      setEmail('');
-      setPassword('');
-    } catch (error) {
-      const firebaseError = error as FirebaseError;
-      console.error('error', firebaseError?.message);
+    if (!email) {
+      setEmailError(true);
+    }
+    if (!password) {
+      setPasswordError(true);
+    }
+
+    if (email && password) {
+      setEmailError(false);
+      setPasswordError(false);
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        setEmail('');
+        setPassword('');
+      } catch (error) {
+        const firebaseError = error as FirebaseError;
+        console.error('error', firebaseError?.message);
+      }
     }
   };
 
@@ -87,68 +115,120 @@ export const Auth = () => {
     <>
       {!isSignIn && (
         <Container disableGutters maxWidth="xl">
-          <Paper elevation={1} sx={{ borderRadius: '0' }}>
+          <Paper elevation={0} sx={{ borderRadius: '0', height: '100vh' }}>
             <Grid2
               container
-              justifyContent="center"
+              justifyContent="flex-start"
               alignItems="center"
-              // flexDirection={{ xs: 'column' }}
-              sx={{
-                fontSize: '12px',
-                padding: '9rem 0',
-              }}
+              flexDirection={{ xs: 'column' }}
               size={12}
             >
-              <Grid2>
-                <TextField
-                  id="login-email"
-                  label="Email"
-                  type="email"
-                  variant="standard"
-                  onChange={(e) => setEmail(e.target.value)}
-                  value={email}
-                />
-              </Grid2>
-              <Grid2>
-                <TextField
-                  id="login-password"
-                  label="Password"
-                  type="password"
-                  variant="standard"
-                  onChange={(e) => setPassword(e.target.value)}
-                  value={password}
-                />
-              </Grid2>
               <Grid2
                 container
                 justifyContent="center"
                 alignItems="center"
-                flexDirection="column"
-                sx={{ marginLeft: '2rem' }}
+                flexDirection={{ xs: 'column' }}
+                sx={{
+                  marginTop: '6rem',
+                }}
+                size={{ xs: 12, sm: 10, md: 6 }}
               >
-                <ButtonGroup variant="text" aria-label="Basic button group">
-                  <Button onClick={handleCreateAndLogin}>Sign up</Button>
-                  <Button onClick={handledLogin}>Sign in</Button>
-                  <Button onClick={handleLoginWithGoogle}>
-                    Sign ip with Google
-                  </Button>
-                </ButtonGroup>
+                <Box
+                  component="section"
+                  sx={{
+                    padding: '2rem 1.5rem',
+                    border: '1px solid #959595',
+                    borderRadius: '0.3rem',
+                  }}
+                >
+                  <Grid2
+                    container
+                    justifyContent="center"
+                    alignItems="center"
+                    flexDirection={{ xs: 'column' }}
+                    size={12}
+                  >
+                    <LockOpenIcon
+                      sx={{
+                        marginBottom: '0.75rem',
+                      }}
+                    />
+                    <Typography variant="h5" color="primary">
+                      Sign in
+                    </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      sx={{
+                        paddingTop: '1rem',
+                      }}
+                    >
+                      Welcome, please sign in to continue
+                    </Typography>
+                  </Grid2>
+
+                  <Grid2
+                    container
+                    justifyContent="center"
+                    alignItems="center"
+                    flexDirection={{ xs: 'column', lg: 'row' }}
+                    sx={{
+                      padding: '1rem 0',
+                    }}
+                    spacing={1}
+                    size={12}
+                  >
+                    <Grid2
+                      container
+                      justifyContent="center"
+                      alignItems="center"
+                      flexDirection={{ xs: 'column', md: 'row' }}
+                    >
+                      <TextField
+                        error={emailError}
+                        id="login-email"
+                        label="Email"
+                        variant="standard"
+                        onChange={(e) => {
+                          setEmail(e.target.value);
+                          setEmailError(false);
+                        }}
+                        sx={{ minWidth: { xs: '260px', lg: '167px' } }}
+                        value={email}
+                      />
+                      <TextField
+                        error={passwordError}
+                        id="login-password"
+                        label="Password"
+                        type="password"
+                        variant="standard"
+                        onChange={(e) => {
+                          setPassword(e.target.value);
+                          setPasswordError(false);
+                        }}
+                        sx={{ minWidth: { xs: '260px', lg: '167px' } }}
+                        value={password}
+                      />
+                    </Grid2>
+                    <Grid2
+                      container
+                      justifyContent="center"
+                      alignItems="center"
+                      paddingTop={{ xs: '2rem', lg: '1rem' }}
+                    >
+                      <ButtonGroup
+                        variant="text"
+                        aria-label="Basic button group"
+                      >
+                        <Button onClick={handleCreateAndLogin}>Sign up</Button>
+                        <Button onClick={handledLogin}>Sign in</Button>
+                        <Button onClick={handleLoginWithGoogle}>
+                          Sign in with Google
+                        </Button>
+                      </ButtonGroup>
+                    </Grid2>
+                  </Grid2>
+                </Box>
               </Grid2>
-              {/* <Grid2>
-                <Button variant="outlined" onClick={handleCreateAndLogin}>
-                  Sign up
-                </Button>
-              </Grid2>
-              <Grid2>
-                <Button variant="outlined" onClick={handledLogin}>
-                  Sign ip
-                </Button>
-              </Grid2>
-              <Grid2>
-                <Button variant="outlined" onClick={handleLoginWithGoogle}>
-                  Sign ip with Google
-                </Button>
-              </Grid2> */}
             </Grid2>
           </Paper>
         </Container>
