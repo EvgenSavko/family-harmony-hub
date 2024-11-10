@@ -1,5 +1,5 @@
 // Cache name
-const CACHE_NAME = 'my-app-cache-v1';
+const CACHE_NAME = 'my-app-cache-v2';
 
 // Files to cache
 const urlsToCache = [
@@ -14,7 +14,7 @@ const urlsToCache = [
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(urlsToCache);
+      return cache?.addAll(urlsToCache);
     })
   );
 });
