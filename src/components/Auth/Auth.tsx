@@ -1,52 +1,90 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { auth, googleProvider, db } from '../../firebase';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  signOut,
   signInWithPopup,
 } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
 import { FirebaseError } from 'firebase/app';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { useRerenderOnAuthStateChanged } from '../../shared';
+import {
+  Button,
+  Container,
+  Paper,
+  Grid2,
+  ButtonGroup,
+  TextField,
+  Typography,
+  Box,
+} from '@mui/material';
+import LockOpenIcon from '@mui/icons-material/LockOpen';
 
-type AouthProps = {
-  setIsMyFamilyExist: React.Dispatch<React.SetStateAction<boolean>>;
-};
-
-export const Auth = ({ setIsMyFamilyExist }: AouthProps) => {
+export const Auth = () => {
   const [email, setEmail] = React.useState('');
+  const [emailError, setEmailError] = React.useState(false);
   const [password, setPassword] = React.useState('');
-
+  const [passwordError, setPasswordError] = React.useState(false);
+  const navigate = useNavigate();
   const { isSignIn } = useRerenderOnAuthStateChanged();
 
+  useEffect(() => {
+    if (isSignIn) {
+      navigate('/home');
+    }
+  }, [isSignIn]);
+
   const handleCreateAndLogin = async () => {
-    try {
-      await createUserWithEmailAndPassword(auth, email, password);
+    if (!email) {
+      setEmailError(true);
+    }
+    if (!password) {
+      setPasswordError(true);
+    }
 
-      const userID = email;
-      const docRef = doc(db, 'users', userID);
+    if (email && password) {
+      setEmailError(false);
+      setPasswordError(false);
 
-      await setDoc(docRef, {
-        user_email: email,
-        family_id: '',
-      });
-      setEmail('');
-      setPassword('');
-    } catch (error) {
-      const firebaseError = error as FirebaseError;
-      console.error('error', firebaseError?.message);
+      try {
+        await createUserWithEmailAndPassword(auth, email, password);
+
+        const userID = email;
+        const docRef = doc(db, 'users', userID);
+
+        await setDoc(docRef, {
+          user_email: email,
+          family_id: '',
+        });
+        setEmail('');
+        setPassword('');
+      } catch (error) {
+        const firebaseError = error as FirebaseError;
+        console.error('error', firebaseError?.message);
+      }
     }
   };
 
   const handledLogin = async () => {
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      setEmail('');
-      setPassword('');
-    } catch (error) {
-      const firebaseError = error as FirebaseError;
-      console.error('error', firebaseError?.message);
+    if (!email) {
+      setEmailError(true);
+    }
+    if (!password) {
+      setPasswordError(true);
+    }
+
+    if (email && password) {
+      setEmailError(false);
+      setPasswordError(false);
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        setEmail('');
+        setPassword('');
+      } catch (error) {
+        const firebaseError = error as FirebaseError;
+        console.error('error', firebaseError?.message);
+      }
     }
   };
 
@@ -73,39 +111,127 @@ export const Auth = ({ setIsMyFamilyExist }: AouthProps) => {
     }
   };
 
-  const handleSignOut = async () => {
-    await signOut(auth);
-    setIsMyFamilyExist(false);
-  };
-
   return (
     <>
       {!isSignIn && (
-        <>
-          <input
-            placeholder="Email..."
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
-          />
-          <input
-            placeholder="Passwon..."
-            type="password"
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
-          />
-          <div>
-            <button onClick={handleCreateAndLogin}>Create and login</button>
-            <button onClick={handledLogin}>Login</button>
-            <button onClick={handleLoginWithGoogle}>Login with Google</button>
-          </div>
-        </>
-      )}
+        <Container disableGutters maxWidth="xl">
+          <Paper elevation={0} sx={{ borderRadius: '0', height: '100vh' }}>
+            <Grid2
+              container
+              justifyContent="flex-start"
+              alignItems="center"
+              flexDirection={{ xs: 'column' }}
+              size={12}
+            >
+              <Grid2
+                container
+                justifyContent="center"
+                alignItems="center"
+                flexDirection={{ xs: 'column' }}
+                sx={{
+                  marginTop: '6rem',
+                }}
+                size={{ xs: 12, sm: 10, md: 6 }}
+              >
+                <Box
+                  component="section"
+                  sx={{
+                    padding: '2rem 1.5rem',
+                    border: '1px solid #959595',
+                    borderRadius: '0.3rem',
+                  }}
+                >
+                  <Grid2
+                    container
+                    justifyContent="center"
+                    alignItems="center"
+                    flexDirection={{ xs: 'column' }}
+                    size={12}
+                  >
+                    <LockOpenIcon
+                      sx={{
+                        marginBottom: '0.75rem',
+                      }}
+                    />
+                    <Typography variant="h5" color="primary">
+                      Sign in
+                    </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      sx={{
+                        paddingTop: '1rem',
+                      }}
+                    >
+                      Welcome, please sign in to continue
+                    </Typography>
+                  </Grid2>
 
-      {isSignIn && (
-        <>
-          <h2>Email: {auth.currentUser?.email}</h2>
-          <button onClick={handleSignOut}>signOut</button>
-        </>
+                  <Grid2
+                    container
+                    justifyContent="center"
+                    alignItems="center"
+                    flexDirection={{ xs: 'column', lg: 'row' }}
+                    sx={{
+                      padding: '1rem 0',
+                    }}
+                    spacing={1}
+                    size={12}
+                  >
+                    <Grid2
+                      container
+                      justifyContent="center"
+                      alignItems="center"
+                      flexDirection={{ xs: 'column', md: 'row' }}
+                    >
+                      <TextField
+                        error={emailError}
+                        id="login-email"
+                        label="Email"
+                        variant="standard"
+                        onChange={(e) => {
+                          setEmail(e.target.value);
+                          setEmailError(false);
+                        }}
+                        sx={{ minWidth: { xs: '260px', lg: '167px' } }}
+                        value={email}
+                      />
+                      <TextField
+                        error={passwordError}
+                        id="login-password"
+                        label="Password"
+                        type="password"
+                        variant="standard"
+                        onChange={(e) => {
+                          setPassword(e.target.value);
+                          setPasswordError(false);
+                        }}
+                        sx={{ minWidth: { xs: '260px', lg: '167px' } }}
+                        value={password}
+                      />
+                    </Grid2>
+                    <Grid2
+                      container
+                      justifyContent="center"
+                      alignItems="center"
+                      paddingTop={{ xs: '2rem', lg: '1rem' }}
+                    >
+                      <ButtonGroup
+                        variant="text"
+                        aria-label="Basic button group"
+                      >
+                        <Button onClick={handleCreateAndLogin}>Sign up</Button>
+                        <Button onClick={handledLogin}>Sign in</Button>
+                        <Button onClick={handleLoginWithGoogle}>
+                          Sign in with Google
+                        </Button>
+                      </ButtonGroup>
+                    </Grid2>
+                  </Grid2>
+                </Box>
+              </Grid2>
+            </Grid2>
+          </Paper>
+        </Container>
       )}
     </>
   );
