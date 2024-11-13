@@ -4,6 +4,7 @@ import { signOut } from 'firebase/auth';
 import { auth } from '../../firebase';
 import { useRerenderOnAuthStateChanged } from '../../shared';
 import { useNavigate } from 'react-router-dom';
+import { InstallGuide } from '../InstallGuide';
 
 export const Header = () => {
   const { isSignIn } = useRerenderOnAuthStateChanged();
@@ -27,6 +28,7 @@ export const Header = () => {
           justifyContent: 'space-between',
         }}
       >
+        <InstallGuide />
         <Box>
           <Typography variant="h6">Full size header</Typography>
         </Box>
