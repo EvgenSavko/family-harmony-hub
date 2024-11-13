@@ -18,7 +18,18 @@ root.render(
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
 
+// Unregister any existing service workers
 if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then((registrations) => {
+    registrations.forEach((registration) => {
+      registration.unregister().then(() => {
+        console.log('Service Worker unregistered');
+      });
+    });
+  });
+}
+
+if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/service-worker.js').then(
       (registration) => {
@@ -33,3 +44,19 @@ if ('serviceWorker' in navigator) {
     );
   });
 }
+
+// if ('serviceWorker' in navigator) {
+//   window.addEventListener('load', () => {
+//     navigator.serviceWorker.register('/service-worker.js').then(
+//       (registration) => {
+//         console.log(
+//           'Service Worker registered with scope:',
+//           registration.scope
+//         );
+//       },
+//       (err) => {
+//         console.error('Service Worker registration failed:', err);
+//       }
+//     );
+//   });
+// }
