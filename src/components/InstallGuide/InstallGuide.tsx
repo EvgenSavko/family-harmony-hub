@@ -24,7 +24,7 @@ const color = grey[600];
 const stepsMobile = [
   {
     description:
-      'If you use Safari, please click on this sharing icon in the address bar of the web browser',
+      'If you use Safari, please click on this sharing icon below the address bar of the web browser',
     imagePath: firstStepBobile,
   },
   {
