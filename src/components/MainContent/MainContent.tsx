@@ -1,9 +1,9 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Home, Contact, About } from '../../pages';
-import { ThemeToggle, Header, Auth } from '../../components';
+import { ThemeToggle, Header, Auth, SideBar } from '../../components';
 import { useRerenderOnAuthStateChanged } from '../../shared';
-import { Container, Paper, Link as UILink } from '@mui/material';
+import { Container, Paper, Box, CssBaseline } from '@mui/material';
 
 export const MainContent = () => {
   const { isSignIn } = useRerenderOnAuthStateChanged();
@@ -18,37 +18,42 @@ export const MainContent = () => {
           </Routes>
           <Container maxWidth="xl">
             <>
-              {isSignIn && (
-                <nav style={{ float: 'inline-start' }}>
-                  <ul>
-                    <li>
-                      <Link to="/">
-                        <UILink>Login</UILink>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/home">
-                        <UILink>Home</UILink>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/about">
-                        <UILink>About</UILink>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/contact">
-                        <UILink>Contact</UILink>
-                      </Link>
-                    </li>
-                  </ul>
-                </nav>
-              )}
-              <Routes>
-                <Route path="/home" element={<Home />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/contact" element={<Contact />} />
-              </Routes>
+              <Box sx={{ display: 'flex' }}>
+                <CssBaseline />
+
+                {isSignIn && <SideBar />}
+                {/* {isSignIn && (
+                  <nav>
+                    <ul>
+                      <li>
+                        <Link to="/">
+                          <UILink>Login</UILink>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link to="/home">
+                          <UILink>Home</UILink>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link to="/about">
+                          <UILink>About</UILink>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link to="/contact">
+                          <UILink>Contact</UILink>
+                        </Link>
+                      </li>
+                    </ul>
+                  </nav>
+                )} */}
+                <Routes>
+                  <Route path="/home" element={<Home />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/contact" element={<Contact />} />
+                </Routes>
+              </Box>
             </>
           </Container>
           <ThemeToggle />
