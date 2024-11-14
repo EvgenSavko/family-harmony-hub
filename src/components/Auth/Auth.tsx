@@ -17,6 +17,8 @@ import {
   ButtonGroup,
   TextField,
   Typography,
+  Snackbar,
+  Alert,
   Box,
 } from '@mui/material';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
@@ -25,6 +27,7 @@ export const Auth = () => {
   const [email, setEmail] = React.useState('');
   const [emailError, setEmailError] = React.useState(false);
   const [password, setPassword] = React.useState('');
+  const [errorMessage, setErrorMessage] = React.useState('');
   const [passwordError, setPasswordError] = React.useState(false);
   const navigate = useNavigate();
   const { isSignIn } = useRerenderOnAuthStateChanged();
@@ -61,7 +64,9 @@ export const Auth = () => {
         setPassword('');
       } catch (error) {
         const firebaseError = error as FirebaseError;
-        console.error('error', firebaseError?.message);
+        setEmailError(true);
+        setPasswordError(true);
+        setErrorMessage(firebaseError?.message);
       }
     }
   };
@@ -83,7 +88,9 @@ export const Auth = () => {
         setPassword('');
       } catch (error) {
         const firebaseError = error as FirebaseError;
-        console.error('error', firebaseError?.message);
+        setEmailError(true);
+        setPasswordError(true);
+        setErrorMessage(firebaseError?.message);
       }
     }
   };
@@ -107,12 +114,26 @@ export const Auth = () => {
       }
     } catch (error) {
       const firebaseError = error as FirebaseError;
-      console.error('error', firebaseError?.message);
+      setErrorMessage(firebaseError?.message);
     }
   };
 
   return (
     <>
+      <Snackbar
+        open={!!errorMessage}
+        autoHideDuration={6000}
+        onClose={() => setErrorMessage('')}
+      >
+        <Alert
+          onClose={() => setErrorMessage('')}
+          severity="error"
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          {errorMessage}
+        </Alert>
+      </Snackbar>
       {!isSignIn && (
         <Container disableGutters maxWidth="xl">
           <Paper elevation={0} sx={{ borderRadius: '0', height: '100vh' }}>
