@@ -17,6 +17,7 @@
       }
     },
     "rules": {
-      "prettier/prettier": "error" // Prettier rules should be error
+      "prettier/prettier": "error", // Prettier rules should be error
+      "react/react-in-jsx-scope": "off"
     }
 }
