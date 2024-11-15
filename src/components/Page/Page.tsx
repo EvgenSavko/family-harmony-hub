@@ -13,7 +13,7 @@ export const Page = ({ isHomePage, children }: PageProps) => {
   if (!isSignIn && !isHomePage) return <p>Please authorize</p>;
 
   return (
-    <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+    <Box component="main" sx={{ flexGrow: 1, p: 1, pl: { xs: 1, md: 3 } }}>
       {children}
     </Box>
   );

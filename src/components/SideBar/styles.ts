@@ -1,6 +1,7 @@
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import { styled, Theme, CSSObject } from '@mui/material/styles';
+import { grey } from '@mui/material/colors';
 
 const drawerWidth = 240;
 
@@ -90,4 +91,42 @@ const Drawer = styled(MuiDrawer, {
   ],
 }));
 
-export { Drawer, AppBar, DrawerHeader };
+const drawerBleeding = 56;
+
+const Root = styled('div')(({ theme }) => ({
+  height: '100%',
+  backgroundColor: grey[100],
+  ...theme.applyStyles('dark', {
+    backgroundColor: theme.palette.background.default,
+  }),
+}));
+
+const StyledBox = styled('div')(({ theme }) => ({
+  backgroundColor: '#fff',
+  ...theme.applyStyles('dark', {
+    backgroundColor: grey[800],
+  }),
+}));
+
+const Puller = styled('div')(({ theme }) => ({
+  width: 30,
+  height: 6,
+  backgroundColor: grey[300],
+  borderRadius: 3,
+  position: 'absolute',
+  top: 8,
+  left: 'calc(50% - 15px)',
+  ...theme.applyStyles('dark', {
+    backgroundColor: grey[900],
+  }),
+}));
+
+export {
+  Drawer,
+  AppBar,
+  DrawerHeader,
+  Puller,
+  StyledBox,
+  Root,
+  drawerBleeding,
+};
