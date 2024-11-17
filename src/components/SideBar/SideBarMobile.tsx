@@ -66,6 +66,7 @@ export const SideBarMobile = (props: Props) => {
           sx={{
             position: 'absolute',
             top: -drawerBleeding,
+            height: drawerBleeding,
             borderTopLeftRadius: 8,
             borderTopRightRadius: 8,
             visibility: 'visible',

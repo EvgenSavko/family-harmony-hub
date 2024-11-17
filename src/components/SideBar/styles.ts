@@ -91,7 +91,7 @@ const Drawer = styled(MuiDrawer, {
   ],
 }));
 
-const drawerBleeding = 56;
+const drawerBleeding = 76;
 
 const Root = styled('div')(({ theme }) => ({
   height: '100%',

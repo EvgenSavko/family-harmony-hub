@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Page, CreateFamily, MyFamily } from '../../components';
 import { useRerenderOnAuthStateChanged } from '../../shared';
-import { auth } from '../../firebase';
+
 import Typography from '@mui/material/Typography';
 
 export const Home = () => {
@@ -15,8 +15,6 @@ export const Home = () => {
         Home
       </Typography>
 
-      <h2>Email: {auth.currentUser?.email}</h2>
-      <br />
       {isLoading && <h1>Loading....</h1>}
       <br />
       {isSignIn && (
