@@ -33,7 +33,12 @@ export const Profile = () => {
         <Box sx={{ width: '100%' }}>
           {inProgress && (
             <LinearProgress
-              sx={{ position: 'fixed', width: '100%', bottom: 0 }}
+              sx={{
+                position: 'fixed',
+                width: '100%',
+                top: 0,
+                left: 0,
+              }}
             />
           )}
         </Box>

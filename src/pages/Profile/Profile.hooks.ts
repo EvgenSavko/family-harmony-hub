@@ -108,7 +108,6 @@ export const useProfile = () => {
     const ownerEmail = auth.currentUser?.email;
 
     if (ownerEmail) {
-      setInProgress(true);
       const docUsersRef = doc(db, 'users', ownerEmail);
       await updateDoc(docUsersRef, {
         ...user,
@@ -128,6 +127,7 @@ export const useProfile = () => {
       | ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
       | SelectChangeEvent<string>
   ) => {
+    setInProgress(true);
     setUserState((prev) => ({ ...prev, [name]: event.target.value }));
     debouncedSubmitUser({ ...userState, [name]: event.target.value });
   };
