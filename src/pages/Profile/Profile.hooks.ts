@@ -135,5 +135,6 @@ export const useProfile = () => {
     handleChange,
     phoneInputStyle,
     bloodTypesOptions,
+    userEmail: auth.currentUser?.email,
   } as const;
 };

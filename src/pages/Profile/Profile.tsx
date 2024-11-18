@@ -12,8 +12,13 @@ import Grid from '@mui/material/Grid2';
 import { useProfile } from './Profile.hooks';
 
 export const Profile = () => {
-  const { userState, handleChange, phoneInputStyle, bloodTypesOptions } =
-    useProfile();
+  const {
+    userEmail,
+    userState,
+    handleChange,
+    phoneInputStyle,
+    bloodTypesOptions,
+  } = useProfile();
 
   return (
     <Page>
@@ -24,6 +29,20 @@ export const Profile = () => {
       <Paper elevation={1}>
         <Grid size={12} pt={{ xs: 1, md: 2 }} pl={{ xs: 2, md: 3 }}>
           <Typography variant="h5">Personal information</Typography>
+        </Grid>
+        <Grid
+          size={12}
+          pt={{ xs: 1, md: 2 }}
+          pl={{ xs: 2, md: 3 }}
+          pr={{ xs: 2, md: 3 }}
+        >
+          <TextField
+            label="Email"
+            value={userEmail}
+            variant="outlined"
+            fullWidth
+            disabled
+          />
         </Grid>
         <Grid container spacing={2} p={{ xs: 2, md: 3 }}>
           <Grid size={{ xs: 12, md: 4 }}>
