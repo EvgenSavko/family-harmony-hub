@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Home, Contact, About } from '../../pages';
+import { Home, Contact, About, Profile } from '../../pages';
 import { ThemeToggle, Header, Auth, SideBar } from '../../components';
 import { useRerenderOnAuthStateChanged } from '../../shared';
 import { Container, Paper, Box, CssBaseline } from '@mui/material';
@@ -33,6 +33,7 @@ export const MainContent = () => {
                 <Route path="/home" element={<Home />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
+                <Route path="/profile" element={<Profile />} />
               </Routes>
             </Box>
           </>
