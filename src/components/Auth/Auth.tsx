@@ -19,6 +19,7 @@ import {
   Typography,
   Snackbar,
   Alert,
+  Fade,
   Box,
 } from '@mui/material';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
@@ -154,101 +155,105 @@ export const Auth = () => {
                 }}
                 size={{ xs: 12, sm: 10, md: 6 }}
               >
-                <Box
-                  component="section"
-                  sx={{
-                    padding: '2rem 1.5rem',
-                    border: '1px solid #959595',
-                    borderRadius: '0.3rem',
-                  }}
-                >
-                  <Grid2
-                    container
-                    justifyContent="center"
-                    alignItems="center"
-                    flexDirection={{ xs: 'column' }}
-                    size={12}
-                  >
-                    <LockOpenIcon
-                      sx={{
-                        marginBottom: '0.75rem',
-                      }}
-                    />
-                    <Typography variant="h5" color="primary">
-                      Sign in
-                    </Typography>
-                    <Typography
-                      variant="subtitle1"
-                      sx={{
-                        paddingTop: '1rem',
-                      }}
-                    >
-                      Welcome, please sign in to continue
-                    </Typography>
-                  </Grid2>
-
-                  <Grid2
-                    container
-                    justifyContent="center"
-                    alignItems="center"
-                    flexDirection={{ xs: 'column', lg: 'row' }}
+                <Fade in={!isSignIn}>
+                  <Box
+                    component="section"
                     sx={{
-                      padding: '1rem 0',
+                      padding: '2rem 1.5rem',
+                      border: '1px solid #959595',
+                      borderRadius: '0.3rem',
                     }}
-                    spacing={1}
-                    size={12}
                   >
                     <Grid2
                       container
                       justifyContent="center"
                       alignItems="center"
-                      flexDirection={{ xs: 'column', md: 'row' }}
+                      flexDirection={{ xs: 'column' }}
+                      size={12}
                     >
-                      <TextField
-                        error={emailError}
-                        id="login-email"
-                        label="Email"
-                        variant="standard"
-                        onChange={(e) => {
-                          setEmail(e.target.value);
-                          setEmailError(false);
+                      <LockOpenIcon
+                        sx={{
+                          marginBottom: '0.75rem',
                         }}
-                        sx={{ minWidth: { xs: '260px', lg: '167px' } }}
-                        value={email}
                       />
-                      <TextField
-                        error={passwordError}
-                        id="login-password"
-                        label="Password"
-                        type="password"
-                        variant="standard"
-                        onChange={(e) => {
-                          setPassword(e.target.value);
-                          setPasswordError(false);
+                      <Typography variant="h5" color="primary">
+                        Sign in
+                      </Typography>
+                      <Typography
+                        variant="subtitle1"
+                        sx={{
+                          paddingTop: '1rem',
                         }}
-                        sx={{ minWidth: { xs: '260px', lg: '167px' } }}
-                        value={password}
-                      />
+                      >
+                        Welcome, please sign in to continue
+                      </Typography>
                     </Grid2>
+
                     <Grid2
                       container
                       justifyContent="center"
                       alignItems="center"
-                      paddingTop={{ xs: '2rem', lg: '1rem' }}
+                      flexDirection={{ xs: 'column', lg: 'row' }}
+                      sx={{
+                        padding: '1rem 0',
+                      }}
+                      spacing={1}
+                      size={12}
                     >
-                      <ButtonGroup
-                        variant="text"
-                        aria-label="Basic button group"
+                      <Grid2
+                        container
+                        justifyContent="center"
+                        alignItems="center"
+                        flexDirection={{ xs: 'column', md: 'row' }}
                       >
-                        <Button onClick={handleCreateAndLogin}>Sign up</Button>
-                        <Button onClick={handledLogin}>Sign in</Button>
-                        <Button onClick={handleLoginWithGoogle}>
-                          Sign in with Google
-                        </Button>
-                      </ButtonGroup>
+                        <TextField
+                          error={emailError}
+                          id="login-email"
+                          label="Email"
+                          variant="standard"
+                          onChange={(e) => {
+                            setEmail(e.target.value);
+                            setEmailError(false);
+                          }}
+                          sx={{ minWidth: { xs: '260px', lg: '167px' } }}
+                          value={email}
+                        />
+                        <TextField
+                          error={passwordError}
+                          id="login-password"
+                          label="Password"
+                          type="password"
+                          variant="standard"
+                          onChange={(e) => {
+                            setPassword(e.target.value);
+                            setPasswordError(false);
+                          }}
+                          sx={{ minWidth: { xs: '260px', lg: '167px' } }}
+                          value={password}
+                        />
+                      </Grid2>
+                      <Grid2
+                        container
+                        justifyContent="center"
+                        alignItems="center"
+                        paddingTop={{ xs: '2rem', lg: '1rem' }}
+                      >
+                        <ButtonGroup
+                          variant="text"
+                          aria-label="Basic button group"
+                        >
+                          <Button onClick={handleCreateAndLogin}>
+                            Sign up
+                          </Button>
+                          <Button onClick={handledLogin}>Sign in</Button>
+                          <Button onClick={handleLoginWithGoogle}>
+                            Sign in with Google
+                          </Button>
+                        </ButtonGroup>
+                      </Grid2>
                     </Grid2>
-                  </Grid2>
-                </Box>
+                  </Box>
+                </Fade>
               </Grid2>
             </Grid2>
           </Paper>
