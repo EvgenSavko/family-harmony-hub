@@ -6,6 +6,8 @@ import {
   FormControl,
   InputLabel,
   Select,
+  LinearProgress,
+  Box,
   MenuItem,
 } from '@mui/material';
 import Grid from '@mui/material/Grid2';
@@ -18,6 +20,7 @@ export const Profile = () => {
     handleChange,
     phoneInputStyle,
     bloodTypesOptions,
+    inProgress,
   } = useProfile();
 
   return (
@@ -27,6 +30,13 @@ export const Profile = () => {
       </Typography>
 
       <Paper elevation={1}>
+        <Box sx={{ width: '100%' }}>
+          {inProgress && (
+            <LinearProgress
+              sx={{ position: 'fixed', width: '100%', bottom: 0 }}
+            />
+          )}
+        </Box>
         <Grid size={12} pt={{ xs: 1, md: 2 }} pl={{ xs: 2, md: 3 }}>
           <Typography variant="h5">Personal information</Typography>
         </Grid>
@@ -95,13 +105,13 @@ export const Profile = () => {
           </Grid>
           <Grid size={{ xs: 12, md: 4 }}>
             <TextField
-              label="Soulmate phone"
+              label="Emergency phone"
               variant="outlined"
               fullWidth
               type="number"
               sx={phoneInputStyle}
-              value={userState['soulmate_phone']}
-              onChange={(e) => handleChange('soulmate_phone', e)}
+              value={userState['emergency_phone']}
+              onChange={(e) => handleChange('emergency_phone', e)}
             />
           </Grid>
           <Grid size={{ xs: 12, md: 4 }}>

@@ -136,7 +136,7 @@ export const SideBarDesktop = () => {
         </List>
         <Divider />
         <List>
-          {routes2.map((route, index) => (
+          {routes2.map((route) => (
             <ListItem
               key={route.label}
               disablePadding
