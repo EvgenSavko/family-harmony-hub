@@ -27,13 +27,13 @@ const bloodTypesOptions = [
   'O negative (O-)',
 ];
 
-interface UserState {
+export interface UserState {
   first_name: string;
   blood_type: string;
   last_name: string;
   birthday: string;
   phone: string;
-  soulmate_phone: string;
+  emergency_phone: string;
   address: string;
   health_conditions: string;
   medications: string;
@@ -49,7 +49,7 @@ const defaultUserState = {
   last_name: '',
   birthday: '',
   phone: '',
-  soulmate_phone: '',
+  emergency_phone: '',
   address: '',
   health_conditions: '',
   medications: '',
@@ -69,6 +69,7 @@ const debounce = (func: (...args: any[]) => void, delay: number) => {
 
 export const useProfile = () => {
   const [userState, setUserState] = useState<UserState>(defaultUserState);
+  const [inProgress, setInProgress] = useState(false);
 
   useEffect(() => {
     const getUser = async () => {
@@ -88,7 +89,7 @@ export const useProfile = () => {
             last_name: userSnap.data().last_name || '',
             birthday: userSnap.data().birthday || '',
             phone: userSnap.data().phone || '',
-            soulmate_phone: userSnap.data().soulmate_phone || '',
+            emergency_phone: userSnap.data().emergency_phone || '',
             address: userSnap.data().address || '',
             health_conditions: userSnap.data().health_conditions || '',
             medications: userSnap.data().medications || '',
@@ -108,10 +109,10 @@ export const useProfile = () => {
 
     if (ownerEmail) {
       const docUsersRef = doc(db, 'users', ownerEmail);
-      console.log('user', user);
       await updateDoc(docUsersRef, {
         ...user,
       });
+      setInProgress(false);
     }
   };
 
@@ -126,6 +127,7 @@ export const useProfile = () => {
       | ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
       | SelectChangeEvent<string>
   ) => {
+    setInProgress(true);
     setUserState((prev) => ({ ...prev, [name]: event.target.value }));
     debouncedSubmitUser({ ...userState, [name]: event.target.value });
   };
@@ -136,5 +138,6 @@ export const useProfile = () => {
     phoneInputStyle,
     bloodTypesOptions,
     userEmail: auth.currentUser?.email,
+    inProgress,
   } as const;
 };
