@@ -86,7 +86,12 @@ export const FamilyProfile = () => {
             >
               <Card>
                 <CardContent sx={{ pb: 0 }}>
-                  <Typography variant="body1">
+                  <Typography
+                    variant="body1"
+                    sx={(theme) => ({
+                      color: theme.palette.primary.main,
+                    })}
+                  >
                     <strong>Email:</strong> {user.user_email}
                   </Typography>
                   <Typography variant="body1">
