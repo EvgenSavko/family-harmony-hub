@@ -51,6 +51,15 @@ export const AddMembers = () => {
       >
         <Typography variant="h5">Add new members to you family</Typography>
       </Grid>
+
+      <Zoom in={!!membersV2.length}>
+        <Grid size={12} pb={{ xs: 1, md: 1 }} pl={{ xs: 2, md: 3 }} mb={2}>
+          <Typography variant="subtitle1">
+            List of new family members
+          </Typography>
+        </Grid>
+      </Zoom>
+
       {membersV2.map((user, index) => (
         <Zoom in={true} key={user.email}>
           <Grid
@@ -142,6 +151,7 @@ export const AddMembers = () => {
             onClick={handleAddMember}
             variant={isMobile ? 'extended' : undefined}
             sx={isMobile ? { width: '100%' } : {}}
+            disabled={!userState['email'] || !userState['role']}
           >
             <AddIcon />
           </Fab>
