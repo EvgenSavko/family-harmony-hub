@@ -2,21 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { auth, db } from '../../../../firebase';
 import { getDoc, getDocs, doc, collection } from 'firebase/firestore';
 import { FirebaseError } from 'firebase/app';
-import { AddMembers } from '../AddMembers';
+import { Typography, LinearProgress, Box } from '@mui/material';
+import Grid from '@mui/material/Grid2';
+import { FamilyDataProps } from '../../../../shared';
+import { getUserFromFirebase } from '../../../../shared';
 
 const familyDataDefault = {
-  number: 0,
+  name: '',
   description: '',
   ownerEmail: '',
   familyMembers: [],
 };
-
-interface FamilyDataProps {
-  number: number;
-  description: string;
-  ownerEmail: string;
-  familyMembers: Array<string>;
-}
 
 type MyFamilyProps = {
   setIsMyFamilyExist: React.Dispatch<React.SetStateAction<boolean>>;
@@ -31,23 +27,19 @@ export const MyFamily = ({
 }: MyFamilyProps) => {
   const userEmail = auth.currentUser?.email;
   const [familyId, setFamilyId] = useState('');
-  const [isAddMembersLoading, setIsAddMembersLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [familyData, setFamilyData] =
     useState<FamilyDataProps>(familyDataDefault);
 
   useEffect(() => {
-    const getUser = async () => {
-      if (userEmail) {
-        const userRef = doc(db, 'users', userEmail);
-        const userSnap = await getDoc(userRef);
-
-        if (userSnap.exists()) {
-          setFamilyId(userSnap.data().family_id);
-        }
+    getUserFromFirebase().then((data) => {
+      if (data) {
+        setFamilyId(data?.family_id);
       }
-    };
-
-    getUser();
+      if (!data?.family_id) {
+        setIsLoading(false);
+      }
+    });
   }, [userEmail, isMyFamilyExist, isSignIn]);
 
   useEffect(() => {
@@ -60,11 +52,12 @@ export const MyFamily = ({
           if (familySnap.exists()) {
             setFamilyData({
               description: familySnap.data().description,
-              number: familySnap.data().number,
+              name: familySnap.data().name,
               ownerEmail: familyId,
               familyMembers: familySnap.data().family_members,
             });
             setIsMyFamilyExist(true);
+            setIsLoading(false);
           }
         }
       } catch (error) {
@@ -75,14 +68,14 @@ export const MyFamily = ({
 
     const getFamilies = async () => {
       try {
-        const usersRef = collection(db, 'families');
-        const querySnapshot = await getDocs(usersRef);
+        const familiesRef = collection(db, 'families');
+        const querySnapshot = await getDocs(familiesRef);
 
-        const users = querySnapshot.docs.map((doc) => ({
+        const families = querySnapshot.docs.map((doc) => ({
           ...doc.data(),
           id: doc.id,
         }));
-        console.log('All families :', users);
+        console.log('All families :', families);
       } catch (error) {
         const firebaseError = error as FirebaseError;
         console.error('error', firebaseError?.message);
@@ -91,7 +84,7 @@ export const MyFamily = ({
 
     getFamily();
     getFamilies();
-  }, [familyId, isMyFamilyExist, isSignIn, isAddMembersLoading]);
+  }, [familyId, isMyFamilyExist, isSignIn]);
 
   useEffect(() => {
     return () => {
@@ -99,38 +92,72 @@ export const MyFamily = ({
     };
   }, []);
 
-  //   console.log('familyData', familyData);
-
-  const currentUserIsOwner = userEmail === familyData.ownerEmail;
+  if (isLoading)
+    return (
+      <Grid size={12} minHeight={'5.8rem'}>
+        <Box sx={{ width: '100%' }}>
+          <LinearProgress />
+        </Box>
+      </Grid>
+    );
 
   if (!isMyFamilyExist)
     return (
-      <div style={{ border: '1px solid blue' }}>
-        <h3>You don`t have family.</h3>
-      </div>
+      <Grid
+        size={12}
+        pt={{ xs: 3, md: 2 }}
+        pb={{ xs: 3, md: 2 }}
+        pl={{ xs: 2, md: 3 }}
+        pr={{ xs: 2, md: 3 }}
+      >
+        <Typography variant="h5">You don`t have family yet.</Typography>
+        <Typography variant="subtitle1">
+          Create your own family or ask to be assigned.
+        </Typography>
+      </Grid>
     );
 
   return (
-    <div style={{ border: '1px solid blue' }}>
-      <h2>MyFamily</h2>
-      {isAddMembersLoading && <h2>Loading ....</h2>}
-      {!isAddMembersLoading && (
-        <>
-          <>
-            <h3>Owner is: {familyId}</h3>
-            <h3>Family #: {familyData.number > 0 && familyData.number}</h3>
-            <h3>Description: {familyData.description}</h3>
-            <h3>Family members: {familyData.familyMembers?.join(', ')}</h3>
-          </>
-        </>
-      )}
-      <br />
-      {currentUserIsOwner && (
-        <AddMembers
-          familyId={familyId}
-          setIsAddMembersLoading={setIsAddMembersLoading}
-        />
-      )}
-    </div>
+    <>
+      <Grid
+        size={12}
+        pt={{ xs: 3, md: 2 }}
+        pb={{ xs: 1, md: 1 }}
+        pl={{ xs: 2, md: 3 }}
+        mb={2}
+      >
+        <Typography variant="h5">My family info</Typography>
+      </Grid>
+      <Grid
+        size={12}
+        pb={{ xs: 3, md: 2 }}
+        pl={{ xs: 2, md: 3 }}
+        pr={{ xs: 2, md: 3 }}
+      >
+        <Typography variant="body1">
+          <strong>Owner is:</strong> {familyId}
+        </Typography>
+        <Typography variant="body1">
+          <strong>Name:</strong> {familyData.name}
+        </Typography>{' '}
+        <Typography variant="body1">
+          <strong>Description:</strong> {familyData.description}
+        </Typography>{' '}
+        <Box display="flex">
+          <Typography variant="body1">
+            <strong>Members:</strong>
+          </Typography>
+          <Typography
+            variant="body1"
+            ml={1}
+            sx={(theme) => ({
+              color: theme.palette.primary.main,
+            })}
+          >
+            {familyData.familyMembers?.join(', ')}
+          </Typography>
+        </Box>
+      </Grid>
+    </>
   );
 };

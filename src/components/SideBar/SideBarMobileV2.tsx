@@ -1,5 +1,3 @@
-import { useState, KeyboardEvent, MouseEvent } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
 import {
   Zoom,
   Fab,
@@ -12,9 +10,10 @@ import {
   ListItemText,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import LogoutIcon from '@mui/icons-material/Logout';
 import { routes, routes2 } from './routes';
 import ListItemIcon from '@mui/material/ListItemIcon';
-
+import { useSideBar } from './SideBar.hooks';
 const fabStyle = {
   position: 'fixed',
   bottom: '2rem',
@@ -22,26 +21,14 @@ const fabStyle = {
 };
 
 export const SideBarMobileV2 = () => {
-  const [isOpenDrawer, setIsOpenDrawer] = useState(false);
-  const { pathname } = useLocation();
-  const navigate = useNavigate();
-
-  const handleNavigateTo = (path: string) => {
-    navigate(path);
-  };
-
-  const toggleDrawer =
-    (open: boolean) => (event: KeyboardEvent | MouseEvent) => {
-      if (
-        event.type === 'keydown' &&
-        ((event as KeyboardEvent).key === 'Tab' ||
-          (event as KeyboardEvent).key === 'Shift')
-      ) {
-        return;
-      }
-
-      setIsOpenDrawer(open);
-    };
+  const {
+    isOpenDrawer,
+    handleSignOut,
+    pathname,
+    setIsOpenDrawer,
+    toggleDrawer,
+    handleNavigateTo,
+  } = useSideBar();
 
   return (
     <>
@@ -136,6 +123,30 @@ export const SideBarMobileV2 = () => {
                 </ListItemButton>
               </ListItem>
             ))}
+            <ListItem disablePadding sx={{ display: 'block' }}>
+              <ListItemButton
+                onClick={handleSignOut}
+                sx={[
+                  {
+                    minHeight: 48,
+                    px: 2.5,
+                  },
+                ]}
+              >
+                <ListItemIcon
+                  sx={[
+                    {
+                      minWidth: 0,
+                      justifyContent: 'center',
+                      mr: 2,
+                    },
+                  ]}
+                >
+                  <LogoutIcon />
+                </ListItemIcon>
+                <ListItemText primary="Sign out" />
+              </ListItemButton>
+            </ListItem>
           </List>
         </Box>
       </Drawer>

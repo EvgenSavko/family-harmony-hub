@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { auth, googleProvider, db } from '../../firebase';
 import {
   createUserWithEmailAndPassword,
@@ -8,7 +8,8 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { FirebaseError } from 'firebase/app';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
-import { useRerenderOnAuthStateChanged } from '../../shared';
+import { useRerenderOnAuthStateChanged, validateEmail } from '../../shared';
+import GoogleIcon from '@mui/icons-material/Google';
 import {
   Button,
   Container,
@@ -25,11 +26,11 @@ import {
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 
 export const Auth = () => {
-  const [email, setEmail] = React.useState('');
-  const [emailError, setEmailError] = React.useState(false);
-  const [password, setPassword] = React.useState('');
-  const [errorMessage, setErrorMessage] = React.useState('');
-  const [passwordError, setPasswordError] = React.useState(false);
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState<string | null>(null);
+  const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [passwordError, setPasswordError] = useState(false);
   const navigate = useNavigate();
   const { isSignIn } = useRerenderOnAuthStateChanged();
 
@@ -40,15 +41,11 @@ export const Auth = () => {
   }, [isSignIn]);
 
   const handleCreateAndLogin = async () => {
-    if (!email) {
-      setEmailError(true);
-    }
     if (!password) {
       setPasswordError(true);
     }
 
     if (email && password) {
-      setEmailError(false);
       setPasswordError(false);
 
       try {
@@ -65,7 +62,7 @@ export const Auth = () => {
         setPassword('');
       } catch (error) {
         const firebaseError = error as FirebaseError;
-        setEmailError(true);
+        setEmailError('Some email error');
         setPasswordError(true);
         setErrorMessage(firebaseError?.message);
       }
@@ -74,14 +71,14 @@ export const Auth = () => {
 
   const handledLogin = async () => {
     if (!email) {
-      setEmailError(true);
+      setEmailError('Some email error');
     }
     if (!password) {
       setPasswordError(true);
     }
 
     if (email && password) {
-      setEmailError(false);
+      setEmailError('');
       setPasswordError(false);
       try {
         await signInWithEmailAndPassword(auth, email, password);
@@ -89,7 +86,7 @@ export const Auth = () => {
         setPassword('');
       } catch (error) {
         const firebaseError = error as FirebaseError;
-        setEmailError(true);
+        setEmailError('Some email error');
         setPasswordError(true);
         setErrorMessage(firebaseError?.message);
       }
@@ -207,16 +204,17 @@ export const Auth = () => {
                         flexDirection={{ xs: 'column', md: 'row' }}
                       >
                         <TextField
-                          error={emailError}
+                          error={!!emailError}
                           id="login-email"
                           label="Email"
                           variant="standard"
                           onChange={(e) => {
                             setEmail(e.target.value);
-                            setEmailError(false);
                           }}
+                          onBlur={validateEmail(setEmailError)}
                           sx={{ minWidth: { xs: '260px', lg: '167px' } }}
                           value={email}
+                          helperText={emailError}
                         />
                         <TextField
                           error={passwordError}
@@ -247,7 +245,7 @@ export const Auth = () => {
                           </Button>
                           <Button onClick={handledLogin}>Sign in</Button>
                           <Button onClick={handleLoginWithGoogle}>
-                            Sign in with Google
+                            With <GoogleIcon fontSize="small" sx={{ ml: 1 }} />
                           </Button>
                         </ButtonGroup>
                       </Grid2>

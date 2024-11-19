@@ -1,7 +1,8 @@
 import { useState, ChangeEvent, useCallback, useEffect } from 'react';
-import { doc, updateDoc, getDoc } from 'firebase/firestore';
+import { doc, updateDoc } from 'firebase/firestore';
 import { SelectChangeEvent } from '@mui/material';
 import { auth, db } from '../../firebase';
+import { UserState, getUserFromFirebase } from '../../shared';
 
 const DEBOUNCE_TIME = 800;
 
@@ -27,22 +28,6 @@ const bloodTypesOptions = [
   'O negative (O-)',
 ];
 
-export interface UserState {
-  first_name: string;
-  blood_type: string;
-  last_name: string;
-  birthday: string;
-  phone: string;
-  emergency_phone: string;
-  address: string;
-  health_conditions: string;
-  medications: string;
-  allergies: string;
-  doctors_phone: string;
-  goals_dreams: string;
-  lifestyle_hobbies: string;
-}
-
 const defaultUserState = {
   first_name: '',
   blood_type: '',
@@ -56,6 +41,7 @@ const defaultUserState = {
   allergies: '',
   doctors_phone: '',
   goals_dreams: '',
+  relationship: '',
   lifestyle_hobbies: '',
 };
 
@@ -72,36 +58,26 @@ export const useProfile = () => {
   const [inProgress, setInProgress] = useState(false);
 
   useEffect(() => {
-    const getUser = async () => {
-      const ownerEmail = auth.currentUser?.email;
-
-      if (ownerEmail) {
-        const docUsersRef = doc(db, 'users', ownerEmail);
-
-        const userSnap = await getDoc(docUsersRef);
-
-        if (userSnap.exists()) {
-          console.log('userData', userSnap.data());
-
-          setUserState({
-            first_name: userSnap.data().first_name || '',
-            blood_type: userSnap.data().blood_type || '',
-            last_name: userSnap.data().last_name || '',
-            birthday: userSnap.data().birthday || '',
-            phone: userSnap.data().phone || '',
-            emergency_phone: userSnap.data().emergency_phone || '',
-            address: userSnap.data().address || '',
-            health_conditions: userSnap.data().health_conditions || '',
-            medications: userSnap.data().medications || '',
-            allergies: userSnap.data().allergies || '',
-            doctors_phone: userSnap.data().doctors_phone || '',
-            goals_dreams: userSnap.data().goals_dreams || '',
-            lifestyle_hobbies: userSnap.data().lifestyle_hobbies || '',
-          });
-        }
+    getUserFromFirebase().then((data) => {
+      if (data) {
+        setUserState({
+          first_name: data.first_name || '',
+          blood_type: data.blood_type || '',
+          last_name: data.last_name || '',
+          birthday: data.birthday || '',
+          phone: data.phone || '',
+          emergency_phone: data.emergency_phone || '',
+          address: data.address || '',
+          health_conditions: data.health_conditions || '',
+          medications: data.medications || '',
+          allergies: data.allergies || '',
+          doctors_phone: data.doctors_phone || '',
+          goals_dreams: data.goals_dreams || '',
+          lifestyle_hobbies: data.lifestyle_hobbies || '',
+          relationship: data.relationship || '',
+        });
       }
-    };
-    getUser();
+    });
   }, [auth.currentUser?.email]);
 
   const submitUser = async (user: UserState) => {

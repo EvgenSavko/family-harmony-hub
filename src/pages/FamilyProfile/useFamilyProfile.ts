@@ -1,16 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getUserFromFirebase, getFamilyFromFirebase } from '../../shared';
+import {
+  getUserFromFirebase,
+  getFamilyFromFirebase,
+  UserStateApi,
+} from '../../shared';
 import { auth } from '../../firebase';
-import { UserState } from '../Profile/Profile.hooks';
-
-interface UserStateApi extends UserState {
-  family_id: string;
-  user_email: string;
-}
 
 export const useFamilyProfile = () => {
   const [familyId, setFamilyId] = useState('');
+  const [inProgress, setInProgress] = useState(false);
   const [expandedIndex, setExpandedIndex] = useState(-1);
   const [isFamilyOwner, setIsFamilyOwner] = useState(false);
   const [familyMembersEmails, setFamilyMembersEmails] = useState([]);
@@ -26,8 +25,13 @@ export const useFamilyProfile = () => {
   };
 
   useEffect(() => {
+    setInProgress(true);
     getUserFromFirebase().then((data) => {
       setFamilyId(data?.family_id);
+
+      if (!data?.family_id) {
+        setInProgress(false);
+      }
     });
   }, [auth.currentUser?.email]);
 
@@ -35,6 +39,10 @@ export const useFamilyProfile = () => {
     if (familyId) {
       getFamilyFromFirebase(familyId).then((data) => {
         setFamilyMembersEmails(data?.family_members);
+
+        if (data?.family_members?.length === 0) {
+          setInProgress(false);
+        }
       });
 
       if (familyId === auth.currentUser?.email) {
@@ -49,6 +57,7 @@ export const useFamilyProfile = () => {
         const data = await getUserFromFirebase(userEmail);
         if (data) {
           setFamilyMembers((prev: any) => [...prev, data]);
+          setInProgress(false);
         }
       });
     }
@@ -58,6 +67,7 @@ export const useFamilyProfile = () => {
     familyMembers,
     isFamilyOwner,
     expandedIndex,
+    inProgress,
     handleAddMember,
     handleExpandClick,
   };

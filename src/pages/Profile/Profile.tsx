@@ -25,23 +25,25 @@ export const Profile = () => {
 
   return (
     <Page>
+      <Box sx={{ width: '100%' }}>
+        {inProgress && (
+          <LinearProgress
+            sx={{
+              position: 'fixed',
+              width: '100%',
+              top: 0,
+              left: 0,
+              height: '0.3rem',
+              zIndex: 1200,
+            }}
+          />
+        )}
+      </Box>
       <Typography variant="h4" color="primary" gutterBottom>
         Profile
       </Typography>
 
       <Paper elevation={1}>
-        <Box sx={{ width: '100%' }}>
-          {inProgress && (
-            <LinearProgress
-              sx={{
-                position: 'fixed',
-                width: '100%',
-                top: 0,
-                left: 0,
-              }}
-            />
-          )}
-        </Box>
         <Grid size={12} pt={{ xs: 1, md: 2 }} pl={{ xs: 2, md: 3 }}>
           <Typography variant="h5">Personal information</Typography>
         </Grid>

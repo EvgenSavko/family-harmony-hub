@@ -5,6 +5,7 @@ import {
   CardContent,
   Fab,
   Paper,
+  LinearProgress,
   Collapse,
   Divider,
   Box,
@@ -52,6 +53,7 @@ export const FamilyProfile = () => {
     handleAddMember,
     expandedIndex,
     handleExpandClick,
+    inProgress,
   } = useFamilyProfile();
 
   return (
@@ -69,6 +71,7 @@ export const FamilyProfile = () => {
           <Typography variant="h5">Information about family members</Typography>
         </Grid>
       </Paper>
+      <Box sx={{ width: '100%' }}>{inProgress && <LinearProgress />}</Box>
       <Box sx={{ flexGrow: 1, pt: 2, pb: 2 }}>
         <Grid container spacing={2}>
           {familyMembers.map((user, index) => (
@@ -83,11 +86,19 @@ export const FamilyProfile = () => {
             >
               <Card>
                 <CardContent sx={{ pb: 0 }}>
-                  <Typography variant="body1">
+                  <Typography
+                    variant="body1"
+                    sx={(theme) => ({
+                      color: theme.palette.primary.main,
+                    })}
+                  >
                     <strong>Email:</strong> {user.user_email}
                   </Typography>
                   <Typography variant="body1">
                     <strong>First name:</strong> {user.first_name}
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Partnership:</strong> {user.relationship}
                   </Typography>
                   <Typography variant="body1">
                     <strong>Birthday:</strong> {user.birthday}
