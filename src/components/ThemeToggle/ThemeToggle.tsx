@@ -8,7 +8,7 @@ import FormLabel from '@mui/material/FormLabel';
 import { useColorScheme } from '@mui/material/styles';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import NightlightIcon from '@mui/icons-material/Nightlight';
-import WysiwygIcon from '@mui/icons-material/Wysiwyg';
+import BrightnessAutoIcon from '@mui/icons-material/BrightnessAuto';
 
 export const ThemeToggle = () => {
   const { mode, setMode } = useColorScheme();
@@ -39,7 +39,7 @@ export const ThemeToggle = () => {
         >
           <FormControlLabel
             value="system"
-            control={<Radio icon={<WysiwygIcon />} />}
+            control={<Radio icon={<BrightnessAutoIcon />} />}
             label="System"
           />
           <FormControlLabel

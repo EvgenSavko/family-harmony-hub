@@ -42,6 +42,10 @@ export const MainContent = () => {
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/family-profile" element={<FamilyProfile />} />
+                <Route
+                  path="/family-profile-information"
+                  element={<FamilyProfile />}
+                />
               </Routes>
             </Box>
           </>
