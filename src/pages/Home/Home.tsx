@@ -32,7 +32,12 @@ export const Home = () => {
       </Typography>
 
       <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
-        <Tabs value={tabIndex} onChange={handleChange} centered>
+        <Tabs
+          value={tabIndex}
+          onChange={handleChange}
+          centered
+          sx={{ '&>div': { paddingLeft: '25px' } }}
+        >
           <Tab label="Create family" />
           <Tab label="My family" />
           {isFamilyOwner && <Tab label="Add members" />}

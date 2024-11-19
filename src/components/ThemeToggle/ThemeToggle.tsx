@@ -6,6 +6,9 @@ import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel from '@mui/material/FormLabel';
 import { useColorScheme } from '@mui/material/styles';
+import LightModeIcon from '@mui/icons-material/LightMode';
+import NightlightIcon from '@mui/icons-material/Nightlight';
+import WysiwygIcon from '@mui/icons-material/Wysiwyg';
 
 export const ThemeToggle = () => {
   const { mode, setMode } = useColorScheme();
@@ -19,17 +22,14 @@ export const ThemeToggle = () => {
         width: '100%',
         alignItems: 'center',
         justifyContent: 'start',
-        bgcolor: 'background.default',
         color: 'text.primary',
         borderRadius: 1,
-        // p: 3,
-        // minHeight: '56px',
       }}
     >
       <FormControl>
-        <FormLabel id="demo-theme-toggle">Theme</FormLabel>
+        <FormLabel id="theme-toggle">Theme</FormLabel>
         <RadioGroup
-          aria-labelledby="demo-theme-toggle"
+          aria-labelledby="heme-toggle"
           name="theme-toggle"
           row
           value={mode}
@@ -37,9 +37,21 @@ export const ThemeToggle = () => {
             setMode(event.target.value as 'system' | 'light' | 'dark')
           }
         >
-          <FormControlLabel value="system" control={<Radio />} label="System" />
-          <FormControlLabel value="light" control={<Radio />} label="Light" />
-          <FormControlLabel value="dark" control={<Radio />} label="Dark" />
+          <FormControlLabel
+            value="system"
+            control={<Radio icon={<WysiwygIcon />} />}
+            label="System"
+          />
+          <FormControlLabel
+            value="light"
+            control={<Radio icon={<LightModeIcon />} />}
+            label="Light"
+          />
+          <FormControlLabel
+            value="dark"
+            control={<Radio icon={<NightlightIcon />} />}
+            label="Dark"
+          />
         </RadioGroup>
       </FormControl>
     </Box>

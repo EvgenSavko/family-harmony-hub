@@ -3,7 +3,7 @@ import { db, auth } from '../../../../firebase';
 import { SelectChangeEvent } from '@mui/material';
 import { doc, updateDoc, getDoc } from 'firebase/firestore';
 import { useMediaQuery } from '@mui/material';
-import { getUserFromFirebase } from '../../../../shared';
+import { getUserFromFirebase, validateEmail } from '../../../../shared';
 
 const defaultUserState = {
   email: '',
@@ -21,6 +21,7 @@ export const useAddMembers = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [userState, setUserState] = useState<UserState>(defaultUserState);
   const isMobile = useMediaQuery('(max-width:600px)');
+  const [emailError, setEmailError] = useState<string | null>(null);
 
   const rolesOptions = [
     'Grandfather',
@@ -117,5 +118,7 @@ export const useAddMembers = () => {
     rolesOptions,
     membersV2,
     userState,
+    validateEmail: validateEmail(setEmailError),
+    emailError,
   };
 };

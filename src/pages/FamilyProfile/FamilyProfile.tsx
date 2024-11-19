@@ -98,6 +98,9 @@ export const FamilyProfile = () => {
                     <strong>First name:</strong> {user.first_name}
                   </Typography>
                   <Typography variant="body1">
+                    <strong>Partnership:</strong> {user.relationship}
+                  </Typography>
+                  <Typography variant="body1">
                     <strong>Birthday:</strong> {user.birthday}
                   </Typography>
                   <Typography variant="body1">

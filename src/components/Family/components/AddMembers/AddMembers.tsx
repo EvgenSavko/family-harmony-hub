@@ -29,6 +29,8 @@ export const AddMembers = () => {
     rolesOptions,
     userState,
     membersV2,
+    validateEmail,
+    emailError,
   } = useAddMembers();
 
   if (isLoading)
@@ -109,6 +111,29 @@ export const AddMembers = () => {
           </Grid>
         </Zoom>
       ))}
+      {membersV2.length > 0 && (
+        <Grid
+          container
+          spacing={2}
+          pl={{ xs: 2, md: 3 }}
+          pr={{ xs: 2, md: 3 }}
+          pb={3}
+          justifyContent={'center'}
+        >
+          <Grid size={{ xs: 12, md: 3 }}>
+            <Button
+              size={isMobile ? 'large' : 'medium'}
+              variant="contained"
+              fullWidth={isMobile}
+              onClick={createFamily}
+              disabled={membersV2.length === 0}
+            >
+              <GroupAddIcon fontSize="small" />{' '}
+              <Box ml={1}>Add member{membersV2.length < 2 ? '' : 's'}</Box>
+            </Button>
+          </Grid>
+        </Grid>
+      )}
       <Divider />
       <Grid
         container
@@ -120,9 +145,12 @@ export const AddMembers = () => {
       >
         <Grid size={{ xs: 12, md: 5 }}>
           <TextField
+            error={!!emailError}
             label="Email"
             value={userState['email']}
             onChange={(e) => handleChange('email', e)}
+            onBlur={validateEmail}
+            helperText={emailError}
             variant="outlined"
             fullWidth
           />
@@ -151,31 +179,10 @@ export const AddMembers = () => {
             onClick={handleAddMember}
             variant={isMobile ? 'extended' : undefined}
             sx={isMobile ? { width: '100%' } : {}}
-            disabled={!userState['email'] || !userState['role']}
+            disabled={!userState['email'] || !userState['role'] || !!emailError}
           >
             <AddIcon />
           </Fab>
-        </Grid>
-      </Grid>
-      <Grid
-        container
-        spacing={2}
-        pl={{ xs: 2, md: 3 }}
-        pr={{ xs: 2, md: 3 }}
-        pb={3}
-        justifyContent={'center'}
-      >
-        <Grid size={{ xs: 12, md: 3 }}>
-          <Button
-            size={isMobile ? 'large' : 'medium'}
-            variant="contained"
-            fullWidth={isMobile}
-            onClick={createFamily}
-            disabled={membersV2.length === 0}
-          >
-            <GroupAddIcon fontSize="small" />{' '}
-            <Box ml={1}>Add member{membersV2.length < 2 ? '' : 's'}</Box>
-          </Button>
         </Grid>
       </Grid>
     </>

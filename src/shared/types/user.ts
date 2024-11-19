@@ -12,6 +12,7 @@ export interface UserState {
   doctors_phone: string;
   goals_dreams: string;
   lifestyle_hobbies: string;
+  relationship: string;
 }
 
 export interface UserStateApi extends UserState {

@@ -41,6 +41,7 @@ const defaultUserState = {
   allergies: '',
   doctors_phone: '',
   goals_dreams: '',
+  relationship: '',
   lifestyle_hobbies: '',
 };
 
@@ -73,6 +74,7 @@ export const useProfile = () => {
           doctors_phone: data.doctors_phone || '',
           goals_dreams: data.goals_dreams || '',
           lifestyle_hobbies: data.lifestyle_hobbies || '',
+          relationship: data.relationship || '',
         });
       }
     });
