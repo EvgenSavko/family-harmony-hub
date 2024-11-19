@@ -1,6 +1,5 @@
 import { useMediaQuery } from '@mui/material';
 import { SideBarDesktop } from './SideBarDesktop';
-// import { SideBarMobile } from './SideBarMobile';
 import { SideBarMobileV2 } from './SideBarMobileV2';
 
 export const SideBar = () => {

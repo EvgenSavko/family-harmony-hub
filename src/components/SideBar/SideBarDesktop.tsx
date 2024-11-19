@@ -1,5 +1,3 @@
-import { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
 import {
   Toolbar,
   IconButton,
@@ -13,27 +11,21 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import { useTheme } from '@mui/material/styles';
+import LogoutIcon from '@mui/icons-material/Logout';
 import { Drawer, AppBar, DrawerHeader } from './styles';
 import { routes, routes2 } from './routes';
+import { useSideBar } from './SideBar.hooks';
 
 export const SideBarDesktop = () => {
-  const theme = useTheme();
-  const [open, setOpen] = useState(true);
-  const { pathname } = useLocation();
-  const navigate = useNavigate();
-
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
-
-  const handleNavigateTo = (path: string) => {
-    navigate(path);
-  };
+  const {
+    theme,
+    open,
+    pathname,
+    handleDrawerOpen,
+    handleDrawerClose,
+    handleNavigateTo,
+    handleSignOut,
+  } = useSideBar();
 
   return (
     <>
@@ -117,7 +109,6 @@ export const SideBarDesktop = () => {
                 >
                   {<route.icon />}
                 </ListItemIcon>
-
                 <ListItemText
                   primary={route.label}
                   sx={[
@@ -191,6 +182,54 @@ export const SideBarDesktop = () => {
               </ListItemButton>
             </ListItem>
           ))}
+          <ListItem disablePadding sx={{ display: 'block' }}>
+            <ListItemButton
+              onClick={handleSignOut}
+              sx={[
+                {
+                  minHeight: 48,
+                  px: 2.5,
+                },
+                open
+                  ? {
+                      justifyContent: 'initial',
+                    }
+                  : {
+                      justifyContent: 'center',
+                    },
+              ]}
+            >
+              <ListItemIcon
+                sx={[
+                  {
+                    minWidth: 0,
+                    justifyContent: 'center',
+                  },
+                  open
+                    ? {
+                        mr: 3,
+                      }
+                    : {
+                        mr: 'auto',
+                      },
+                ]}
+              >
+                <LogoutIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary="Sing out"
+                sx={[
+                  open
+                    ? {
+                        opacity: 1,
+                      }
+                    : {
+                        opacity: 0,
+                      },
+                ]}
+              />
+            </ListItemButton>
+          </ListItem>
         </List>
       </Drawer>
     </>

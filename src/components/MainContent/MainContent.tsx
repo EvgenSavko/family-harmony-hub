@@ -28,7 +28,6 @@ export const MainContent = () => {
               <CssBaseline />
 
               {isSignIn && <SideBar />}
-
               <Routes>
                 <Route path="/home" element={<Home />} />
                 <Route path="/about" element={<About />} />
