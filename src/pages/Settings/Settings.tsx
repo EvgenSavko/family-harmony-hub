@@ -6,7 +6,13 @@ import { ThemeToggle } from '../../components';
 export const Settings = () => {
   return (
     <Page isHomePage>
-      <Typography variant="h4" gutterBottom color="primary">
+      <Typography
+        variant="h4"
+        gutterBottom
+        color="primary"
+        pt={{ xs: 2, md: 0.5 }}
+        pb={3}
+      >
         Settings
       </Typography>
 

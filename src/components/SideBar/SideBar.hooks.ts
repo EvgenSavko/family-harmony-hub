@@ -7,8 +7,13 @@ import { useTheme } from '@mui/material/styles';
 export const useSideBar = () => {
   const theme = useTheme();
   const [open, setOpen] = useState(true);
+  const [openNavCollapse, setOpenNavCollapse] = useState('');
   const { pathname } = useLocation();
   const navigate = useNavigate();
+
+  const handleNavCollapse = (path: string) => {
+    setOpenNavCollapse((prev) => (prev ? '' : path));
+  };
 
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
 
@@ -53,5 +58,7 @@ export const useSideBar = () => {
     handleSignOut,
     setIsOpenDrawer,
     toggleDrawer,
+    openNavCollapse,
+    handleNavCollapse,
   };
 };

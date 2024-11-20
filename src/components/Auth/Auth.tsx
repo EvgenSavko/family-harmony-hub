@@ -245,7 +245,8 @@ export const Auth = () => {
                           </Button>
                           <Button onClick={handledLogin}>Sign in</Button>
                           <Button onClick={handleLoginWithGoogle}>
-                            With <GoogleIcon fontSize="small" sx={{ ml: 1 }} />
+                            With{' '}
+                            <GoogleIcon fontSize="small" sx={{ ml: 0.5 }} />
                           </Button>
                         </ButtonGroup>
                       </Grid2>

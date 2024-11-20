@@ -58,8 +58,14 @@ export const FamilyProfile = () => {
 
   return (
     <Page>
-      <Typography variant="h4" color="primary" gutterBottom>
-        Family profile
+      <Typography
+        variant="h4"
+        color="primary"
+        gutterBottom
+        pt={{ xs: 2, md: 0.5 }}
+        pb={3}
+      >
+        Family overview
       </Typography>
       <Paper elevation={1}>
         <Grid

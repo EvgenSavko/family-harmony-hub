@@ -39,7 +39,13 @@ export const Profile = () => {
           />
         )}
       </Box>
-      <Typography variant="h4" color="primary" gutterBottom>
+      <Typography
+        variant="h4"
+        color="primary"
+        gutterBottom
+        pt={{ xs: 2, md: 0.5 }}
+        pb={3}
+      >
         Profile
       </Typography>
 
