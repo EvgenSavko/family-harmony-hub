@@ -155,6 +155,7 @@ export const SideBarMobileV2 = () => {
                       </ListItem>
                     ))}
                   </List>
+                  <Divider />
                 </Collapse>
               </>
             ))}
@@ -252,6 +253,7 @@ export const SideBarMobileV2 = () => {
                       </ListItem>
                     ))}
                   </List>
+                  <Divider />
                 </Collapse>
               </>
             ))}

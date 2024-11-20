@@ -126,7 +126,7 @@ export const MyFamily = ({
         pl={{ xs: 2, md: 3 }}
         mb={2}
       >
-        <Typography variant="h5">My family info</Typography>
+        <Typography variant="h5">Little about us</Typography>
       </Grid>
       <Grid
         size={12}

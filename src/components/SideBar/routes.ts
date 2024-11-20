@@ -6,7 +6,7 @@ import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
 import { SvgIconComponent } from '@mui/icons-material';
 import RecentActorsIcon from '@mui/icons-material/RecentActors';
-
+import NoteAddIcon from '@mui/icons-material/NoteAdd';
 interface Route {
   path: string;
   label: string;
@@ -19,12 +19,17 @@ const routes: Route[] = [
   { path: '/profile', label: 'Profile', icon: ContactPageIcon },
   {
     path: '/family-profile',
-    label: 'Family profile',
+    label: 'Family overview',
     icon: FolderSharedIcon,
     children: [
       {
-        path: '/family-profile-information',
-        label: 'Family profile info',
+        path: '/family-creating',
+        label: 'Creating',
+        icon: NoteAddIcon,
+      },
+      {
+        path: '/members-info',
+        label: 'Members info',
         icon: RecentActorsIcon,
       },
     ],

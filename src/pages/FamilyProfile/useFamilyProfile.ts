@@ -21,7 +21,7 @@ export const useFamilyProfile = () => {
   };
 
   const handleAddMember = () => {
-    navigate('/home');
+    navigate('/family-creating');
   };
 
   useEffect(() => {
