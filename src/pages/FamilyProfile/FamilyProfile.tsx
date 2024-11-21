@@ -68,12 +68,7 @@ export const FamilyProfile = () => {
         Family overview
       </Typography>
       <Paper elevation={1}>
-        <Grid
-          size={12}
-          pt={{ xs: 1, md: 2 }}
-          pb={{ xs: 1, md: 2 }}
-          pl={{ xs: 2, md: 3 }}
-        >
+        <Grid size={12} pt={{ xs: 2 }} pb={{ xs: 2 }} pl={{ xs: 2, md: 3 }}>
           <Typography variant="h5">Information about family members</Typography>
         </Grid>
       </Paper>

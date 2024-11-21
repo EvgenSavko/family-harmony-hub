@@ -79,7 +79,7 @@ export const InstallGuide = () => {
   return (
     <Dialog open={isOpen} maxWidth="sm" fullWidth>
       <DialogTitle>Install guide</DialogTitle>
-      <DialogContent>
+      <DialogContent sx={{ p: { xs: 0, md: 3 } }}>
         <Card>
           <Typography variant="body2" sx={{ padding: '2rem 1rem' }}>
             {steps[stepIndex].description}

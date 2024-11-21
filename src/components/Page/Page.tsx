@@ -15,7 +15,13 @@ export const Page = ({ isHomePage, children }: PageProps) => {
   return (
     <Box
       component="main"
-      sx={{ flexGrow: 1, p: 1, pt: { xs: 1, md: 3 }, pl: { xs: 1, md: 3 } }}
+      sx={{
+        flexGrow: 1,
+        p: { xs: 0, md: 1 },
+        pt: { xs: 0, md: 3 },
+        pl: { xs: 0, md: 3 },
+        pr: { xs: 0, md: 3 },
+      }}
     >
       {children}
     </Box>
