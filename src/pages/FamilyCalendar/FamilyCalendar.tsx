@@ -215,8 +215,8 @@ export const FamilyCalendar = () => {
         getFamilyFromFirebase(userData.family_id).then((familyData) => {
           familyData?.family_members?.forEach(async (userEmail: string) => {
             const data = await getUserFromFirebase(userEmail);
-            if (data) {
-              const eventsWithDate: Event[] = data.event_list.map(
+            if (data && data.event_list) {
+              const eventsWithDate: Event[] = data.event_list?.map(
                 (item: Event) => ({
                   ...item,
                   start: moment(item.start),
@@ -231,9 +231,8 @@ export const FamilyCalendar = () => {
               };
 
               setColorEventList((prev: any) => [...prev, eventColorObj]);
-
-              setInProgress(false);
             }
+            setInProgress(false);
           });
         });
       }
@@ -333,7 +332,7 @@ export const FamilyCalendar = () => {
       >
         Family calendar
       </Typography>
-      <Paper elevation={0} sx={{ padding: 2, mb: 2 }}>
+      <Paper elevation={1} sx={{ padding: 2, mb: 2 }}>
         <NavLnk to="/settings">
           <Link>Change the color of your events</Link>
         </NavLnk>

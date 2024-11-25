@@ -69,7 +69,19 @@ export const ThemeColorEven = ({ setInProgress }: ThemeColorEvenProps) => {
   };
 
   const handleToggler = async (event: ChangeEvent<HTMLInputElement>) => {
-    setColor(event.target.value as 'default' | 'red' | 'teal' | 'pink');
+    setColor(
+      event.target.value as
+        | 'default'
+        | 'red'
+        | 'lightGreen'
+        | 'brown'
+        | 'teal'
+        | 'pink'
+        | 'purple'
+        | 'lime'
+        | 'amber'
+        | 'yellow'
+    );
     await updateUserColorEvent(event.target.value);
   };
 
