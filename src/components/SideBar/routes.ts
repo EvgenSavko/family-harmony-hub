@@ -7,6 +7,7 @@ import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
 import { SvgIconComponent } from '@mui/icons-material';
 import RecentActorsIcon from '@mui/icons-material/RecentActors';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
+import EditCalendarIcon from '@mui/icons-material/EditCalendar';
 interface Route {
   path: string;
   label: string;
@@ -31,6 +32,11 @@ const routes: Route[] = [
         path: '/members-info',
         label: 'Members info',
         icon: RecentActorsIcon,
+      },
+      {
+        path: '/family-calendar',
+        label: 'Calendar',
+        icon: EditCalendarIcon,
       },
     ],
   },

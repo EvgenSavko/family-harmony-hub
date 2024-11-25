@@ -2,7 +2,10 @@ import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { FirebaseError } from 'firebase/app';
 
-export const getFamilyFromFirebase = async (familyId: string) => {
+export const getFamilyFromFirebase = async (
+  familyId: string,
+  callBack?: (errorMessage: string) => void
+) => {
   try {
     if (familyId) {
       const familiesRef = doc(db, 'families', familyId);
@@ -15,5 +18,6 @@ export const getFamilyFromFirebase = async (familyId: string) => {
   } catch (error) {
     const firebaseError = error as FirebaseError;
     console.error('error', firebaseError?.message);
+    if (callBack) callBack(firebaseError?.message);
   }
 };

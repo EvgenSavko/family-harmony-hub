@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   Toolbar,
   IconButton,
@@ -75,12 +76,8 @@ export const SideBarDesktop = () => {
         <Divider />
         <List>
           {routes.map((route) => (
-            <>
-              <ListItem
-                key={route.label}
-                disablePadding
-                sx={{ display: 'block' }}
-              >
+            <React.Fragment key={route.label}>
+              <ListItem disablePadding sx={{ display: 'block' }}>
                 <ListItemButton
                   selected={pathname === route.path}
                   onClick={() => {
@@ -211,18 +208,14 @@ export const SideBarDesktop = () => {
                 </List>
                 <Divider />
               </Collapse>
-            </>
+            </React.Fragment>
           ))}
         </List>
         <Divider />
         <List>
           {routes2.map((route) => (
-            <>
-              <ListItem
-                key={route.label}
-                disablePadding
-                sx={{ display: 'block' }}
-              >
+            <React.Fragment key={route.label}>
+              <ListItem disablePadding sx={{ display: 'block' }}>
                 <ListItemButton
                   selected={pathname === route.path}
                   onClick={() => {
@@ -352,7 +345,7 @@ export const SideBarDesktop = () => {
                   ))}
                 </List>
               </Collapse>
-            </>
+            </React.Fragment>
           ))}
           <ListItem disablePadding sx={{ display: 'block' }}>
             <ListItemButton

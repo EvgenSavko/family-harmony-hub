@@ -5,3 +5,4 @@ export * from './Profile';
 export * from './FamilyProfile';
 export * from './Settings';
 export * from './FamilyCreating';
+export * from './FamilyCalendar';

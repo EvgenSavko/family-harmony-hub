@@ -7,6 +7,7 @@ import {
   FamilyProfile,
   Settings,
   FamilyCreating,
+  FamilyCalendar,
 } from '../../pages';
 import { Header, Auth, SideBar } from '../../components';
 import { useRerenderOnAuthStateChanged } from '../../shared';
@@ -42,6 +43,7 @@ export const MainContent = () => {
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/settings" element={<Settings />} />
+                <Route path="/family-calendar" element={<FamilyCalendar />} />
                 <Route path="/family-creating" element={<FamilyCreating />} />
                 <Route path="/members-info" element={<FamilyProfile />} />
               </Routes>

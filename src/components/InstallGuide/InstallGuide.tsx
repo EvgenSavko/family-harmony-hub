@@ -98,13 +98,14 @@ export const InstallGuide = () => {
           <CardActions
             sx={{
               justifyContent: 'center',
-              padding: '2rem 0',
+              marginBottom: '1rem',
+              marginTop: '1rem',
             }}
           >
             {stepIndex > 0 && (
               <Button
                 variant="text"
-                size="small"
+                size="medium"
                 onClick={() => setStepIndex((prev) => prev - 1)}
               >
                 Prev
@@ -113,14 +114,14 @@ export const InstallGuide = () => {
             {stepIndex < steps.length - 1 && (
               <Button
                 variant="contained"
-                size="small"
+                size="medium"
                 onClick={() => setStepIndex((prev) => prev + 1)}
               >
                 Next
               </Button>
             )}
             {stepIndex === steps.length - 1 && (
-              <Button variant="contained" size="small" onClick={handleClose}>
+              <Button variant="contained" size="medium" onClick={handleClose}>
                 Close
               </Button>
             )}
