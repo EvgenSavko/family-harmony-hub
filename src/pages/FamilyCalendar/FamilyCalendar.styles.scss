@@ -1,0 +1,42 @@
+.family-calendar-wrapper {
+  .rbc-toolbar-label {
+    font-size: 1.5rem;
+  }
+
+  .rbc-btn-group {
+    button {
+      height: 2.3rem !important;
+    }
+  }
+}
+
+.family-calendar-light-wrapper {
+  .rbc-event {
+    background-color: #1876d1;
+  }
+}
+
+.family-calendar-dark-wrapper {
+  .rbc-event {
+    background-color: #42a5f5;
+  }
+  .rbc-off-range-bg {
+    background-color: #878787;
+  }
+  .rbc-today {
+    background-color: #a8becd;
+  }
+  .rbc-btn-group {
+    button {
+      color: #ffffff;
+      &:hover {
+        color: #1876d1;
+      }
+    }
+    .rbc-active {
+      color: #0b1824;
+      background-color: #8fc9f9;
+      border: 1px solid #8fc9f9;
+    }
+  }
+}

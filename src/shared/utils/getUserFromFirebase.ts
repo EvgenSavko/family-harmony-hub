@@ -2,7 +2,10 @@ import { doc, getDoc } from 'firebase/firestore';
 import { auth, db } from '../../firebase';
 import { FirebaseError } from 'firebase/app';
 
-export const getUserFromFirebase = async (userEmail?: string) => {
+export const getUserFromFirebase = async (
+  userEmail?: string,
+  callBack?: (errorMessage: string) => void
+) => {
   const ownerEmail = auth.currentUser?.email;
 
   if (ownerEmail) {
@@ -17,6 +20,7 @@ export const getUserFromFirebase = async (userEmail?: string) => {
     } catch (error) {
       const firebaseError = error as FirebaseError;
       console.error('error', firebaseError?.message);
+      if (callBack) callBack(firebaseError?.message);
     }
   }
 };

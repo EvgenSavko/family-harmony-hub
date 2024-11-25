@@ -6,3 +6,4 @@ export * from './MainContent';
 export * from './Header';
 export * from './InstallGuide';
 export * from './SideBar';
+export * from './ThemeColorEven';

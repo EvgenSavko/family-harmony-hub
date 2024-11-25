@@ -20,7 +20,7 @@ export const Page = ({ isHomePage, children }: PageProps) => {
         p: { xs: 0, md: 1 },
         pt: { xs: 0, md: 3 },
         pl: { xs: 0, md: 3 },
-        pr: { xs: 0, md: 3 },
+        pr: { xs: 0, md: 0 },
       }}
     >
       {children}

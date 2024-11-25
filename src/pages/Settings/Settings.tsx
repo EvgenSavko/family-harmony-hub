@@ -1,9 +1,11 @@
 import { Page } from '../../components';
-import { Typography, Paper } from '@mui/material';
+import { useState } from 'react';
+import { Typography, Paper, Box, LinearProgress } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { ThemeToggle } from '../../components';
+import { ThemeToggle, ThemeColorEven } from '../../components';
 
 export const Settings = () => {
+  const [inProgress, setInProgress] = useState(true);
   return (
     <Page isHomePage>
       <Typography
@@ -17,8 +19,12 @@ export const Settings = () => {
       </Typography>
 
       <Paper elevation={1}>
+        <Box>{inProgress && <LinearProgress />}</Box>
         <Grid size={12} p={{ xs: 1, md: 2 }} pl={{ xs: 2, md: 3 }}>
           <ThemeToggle />
+        </Grid>
+        <Grid size={12} p={{ xs: 1, md: 2 }} pl={{ xs: 2, md: 3 }}>
+          <ThemeColorEven setInProgress={setInProgress} />
         </Grid>
       </Paper>
     </Page>

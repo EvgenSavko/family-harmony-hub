@@ -10,6 +10,7 @@ import {
   Collapse,
   ListItemText,
 } from '@mui/material';
+import React from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { routes, routes2 } from './routes';
@@ -65,12 +66,8 @@ export const SideBarMobileV2 = () => {
         >
           <List>
             {routes.map((route) => (
-              <>
-                <ListItem
-                  key={route.label}
-                  disablePadding
-                  sx={{ display: 'block' }}
-                >
+              <React.Fragment key={route.label}>
+                <ListItem disablePadding sx={{ display: 'block' }}>
                   <ListItemButton
                     selected={pathname === route.path}
                     onClick={(event) => {
@@ -157,18 +154,14 @@ export const SideBarMobileV2 = () => {
                   </List>
                   <Divider />
                 </Collapse>
-              </>
+              </React.Fragment>
             ))}
           </List>
           <Divider />
           <List>
             {routes2.map((route) => (
-              <>
-                <ListItem
-                  key={route.label}
-                  disablePadding
-                  sx={{ display: 'block' }}
-                >
+              <React.Fragment key={route.label}>
+                <ListItem disablePadding sx={{ display: 'block' }}>
                   <ListItemButton
                     selected={pathname === route.path}
                     onClick={(event) => {
@@ -255,7 +248,7 @@ export const SideBarMobileV2 = () => {
                   </List>
                   <Divider />
                 </Collapse>
-              </>
+              </React.Fragment>
             ))}
             <ListItem disablePadding sx={{ display: 'block' }}>
               <ListItemButton
