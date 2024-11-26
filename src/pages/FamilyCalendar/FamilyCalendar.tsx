@@ -203,8 +203,8 @@ export const FamilyCalendar = () => {
         const eventsWithDate: Event[] = userData.event_list.map(
           (item: Event) => ({
             ...item,
-            start: moment(item.start),
-            end: moment(item.end),
+            start: moment(item.start).toDate(),
+            end: moment(item.end).toDate(),
           })
         );
         setEventsData(eventsWithDate);
@@ -219,9 +219,8 @@ export const FamilyCalendar = () => {
               const eventsWithDate: Event[] = data.event_list?.map(
                 (item: Event) => ({
                   ...item,
-                  start: moment(item.start),
-                  end: moment(item.end),
-                  style: 'test',
+                  start: moment(item.start).toDate(),
+                  end: moment(item.end).toDate(),
                 })
               );
               setEventsData((prev: any) => [...prev, ...eventsWithDate]);
@@ -287,7 +286,6 @@ export const FamilyCalendar = () => {
       (item) => item.author === event.author
     );
     const backgroundColor = colorState[colorEvent?.color || 'default'];
-
     return {
       style: { backgroundColor },
     };
