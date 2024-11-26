@@ -6,3 +6,5 @@ export * from './FamilyProfile';
 export * from './Settings';
 export * from './FamilyCreating';
 export * from './FamilyCalendar';
+export * from './TaskCreating';
+export * from './MyTasks';

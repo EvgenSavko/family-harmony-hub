@@ -12,7 +12,7 @@ export const useSideBar = () => {
   const navigate = useNavigate();
 
   const handleNavCollapse = (path: string) => {
-    setOpenNavCollapse((prev) => (prev ? '' : path));
+    setOpenNavCollapse((prev) => (prev && path === prev ? '' : path));
   };
 
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);

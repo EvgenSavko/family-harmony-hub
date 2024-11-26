@@ -147,6 +147,7 @@ export const Profile = () => {
               name="Outlined"
               placeholder="Describe health conditions…"
               variant="outlined"
+              label="Health conditions"
               multiline
               fullWidth
               rows={2}
@@ -179,6 +180,7 @@ export const Profile = () => {
               name="Outlined"
               placeholder="Describe the medications you are taking…"
               variant="outlined"
+              label="Medications"
               multiline
               fullWidth
               rows={2}
@@ -200,6 +202,7 @@ export const Profile = () => {
               placeholder="Describe your allergies or intolerance…"
               variant="outlined"
               multiline
+              label="Allergies"
               fullWidth
               rows={2}
               value={userState['allergies']}
@@ -230,6 +233,7 @@ export const Profile = () => {
               placeholder="Describe your goals or dreams…"
               variant="outlined"
               multiline
+              label="Goals or dreams"
               fullWidth
               rows={2}
               value={userState['goals_dreams']}
@@ -242,6 +246,7 @@ export const Profile = () => {
               placeholder="Describe your lifestyle or hobbies…"
               variant="outlined"
               multiline
+              label="Lifestyle or hobbies"
               fullWidth
               rows={2}
               value={userState['lifestyle_hobbies']}

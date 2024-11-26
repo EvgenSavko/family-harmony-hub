@@ -270,12 +270,12 @@ export const FamilyCalendar = () => {
       <Typography variant="body2">Author: {openEvent?.author}</Typography>
       {openEvent?.start && (
         <Typography variant="body2">
-          Start: {moment(openEvent?.start).format('DD/MM/YYYY hh:mm')}
+          Start: {moment(openEvent?.start).format('HH:mm DD/MM/YYYY')}
         </Typography>
       )}
       {openEvent?.end && (
         <Typography variant="body2">
-          End: {moment(openEvent?.end).format('DD/MM/YYYY hh:mm')}
+          End: {moment(openEvent?.end).format('HH:mm DD/MM/YYYY')}
         </Typography>
       )}
     </>
