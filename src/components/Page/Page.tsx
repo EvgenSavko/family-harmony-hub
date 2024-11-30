@@ -17,6 +17,7 @@ export const Page = ({ isHomePage, children }: PageProps) => {
       component="main"
       sx={{
         flexGrow: 1,
+        width: '100%',
         p: { xs: 0, md: 1 },
         pt: { xs: 0, md: 3 },
         pl: { xs: 0, md: 3 },
