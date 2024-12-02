@@ -6,6 +6,8 @@ import {
   TextField,
   Button,
   Box,
+  AlertTitle,
+  Alert,
   LinearProgress,
 } from '@mui/material';
 import Grid from '@mui/material/Grid2';
@@ -71,8 +73,10 @@ export const CreateFamily = () => {
         pl={{ xs: 2, md: 3 }}
         pr={{ xs: 2, md: 3 }}
       >
-        <Typography variant="h5">You already have a family.</Typography>
-        <Typography variant="subtitle1">You cannot create one more.</Typography>
+        <Alert sx={{ mt: 3 }} severity="warning">
+          <AlertTitle>You already have a family.</AlertTitle>
+          You cannot create one more.
+        </Alert>
       </Grid>
     );
 

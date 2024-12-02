@@ -1,6 +1,6 @@
 import { ChangeEvent, useState, useEffect, SyntheticEvent } from 'react';
 import { doc, updateDoc } from 'firebase/firestore';
-import { auth, db } from '../../firebase'; //db
+import { auth, db } from '../../firebase';
 import { Page } from '../../components';
 import { getUserFromFirebase, getFamilyFromFirebase } from '../../shared';
 import {
@@ -32,9 +32,10 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { AssignedToFamily } from './components';
 import { TaskState } from '../../shared';
 
-const defaultTaskState = {
+const defaultTaskState: TaskState = {
   task_name: '',
   task_description: '',
+  task_status: 'pending',
 };
 
 export const TaskCreating = () => {
@@ -72,16 +73,16 @@ export const TaskCreating = () => {
     getUserFromFirebase(assignToUser).then(async (userData: any) => {
       const tasksListObj = {
         tasks: taskListState,
-        assignToUser,
-        listNameToUser,
+        assignToUser: assignToUser,
+        listNameToUser: listNameToUser,
         author: auth.currentUser?.email,
         id: Date.now(),
       };
 
       const docUsersRef = doc(db, 'users', assignToUser);
 
-      if (userData.tasks_list) {
-        const tasksList = userData.tasks_list;
+      if (Array.isArray(userData.tasks_list)) {
+        const tasksList = [...userData.tasks_list];
         await updateDoc(docUsersRef, {
           tasks_list: [tasksListObj, ...tasksList],
         });
@@ -89,7 +90,7 @@ export const TaskCreating = () => {
 
       if (!userData.tasks_list) {
         await updateDoc(docUsersRef, {
-          tasks_list: [tasksListObj],
+          tasks_list: [{}],
         });
       }
       setInProgress(false);

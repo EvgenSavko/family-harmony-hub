@@ -1,6 +1,7 @@
 export interface TaskState {
   task_name: string;
   task_description: string;
+  task_status: 'pending' | 'done' | undefined;
 }
 
 export interface TaskAssignment {

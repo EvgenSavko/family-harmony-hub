@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { auth } from '../../../firebase';
+import { auth, db } from '../../../firebase';
+import { doc, updateDoc } from 'firebase/firestore';
 import { getUserFromFirebase, getFamilyFromFirebase } from '../../../shared';
 import {
   Paper,
@@ -8,6 +9,7 @@ import {
   CardHeader,
   CardContent,
   Typography,
+  Alert,
   List,
   ListItemText,
   LinearProgress,
@@ -17,6 +19,8 @@ import {
 } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { UserTasksList } from '../../../shared';
 
 export const AssignedToFamily = () => {
@@ -24,6 +28,8 @@ export const AssignedToFamily = () => {
   const [taskListsOfMembers, setTaskListsOfMembers] = useState<UserTasksList[]>(
     []
   );
+
+  const authUserEmail = auth.currentUser?.email;
 
   useEffect(() => {
     setInProgress(true);
@@ -62,7 +68,40 @@ export const AssignedToFamily = () => {
         });
       }
     });
-  }, [auth.currentUser?.email]);
+  }, [authUserEmail]);
+
+  const handleDelete = async (userId: number, id: number) => {
+    setInProgress(true);
+    const findUser = taskListsOfMembers.find((item) => item.id === userId);
+    const assignedTo = findUser?.assignedTo;
+
+    const filteredTasksList = [...(findUser?.tasks_list || [])].filter(
+      (item) => item.id !== id
+    );
+    console.log('filteredTasksList', assignedTo, filteredTasksList);
+
+    //Update tasks_list of iser
+    if (assignedTo) {
+      const docUsersRef = doc(db, 'users', assignedTo);
+
+      if (filteredTasksList) {
+        await updateDoc(docUsersRef, {
+          tasks_list: [...filteredTasksList],
+        });
+      }
+    }
+
+    //Update state of  component
+
+    const updatedTaskListsOfMembers = taskListsOfMembers.map((item) => {
+      if (item.id === userId) {
+        return { ...item, tasks_list: [...filteredTasksList] };
+      }
+      return item;
+    });
+    setTaskListsOfMembers(updatedTaskListsOfMembers);
+    setInProgress(false);
+  };
 
   return (
     <>
@@ -74,63 +113,89 @@ export const AssignedToFamily = () => {
       </Paper>
       {taskListsOfMembers.map((user) => (
         <Box key={user.id} sx={{ mb: 3 }}>
-          <Typography variant="h5">Tasks for: {user.first_name}</Typography>
-          <Box
-            component="div"
-            sx={{
-              mb: 3,
-              pb: 3,
-              pt: 3,
-              display: 'flex',
-              gap: '1em',
-              overflowX: 'auto',
-              minHeight: 400,
-              scrollSnapType: 'x mandatory',
-            }}
-          >
-            {user.tasks_list?.map((item) => (
-              <Card
-                key={item.id}
-                sx={{
-                  width: 'auto',
-                  maxWidth: 300,
-                  scrollSnapAlign: 'start',
-                  flexShrink: 0,
-                  aspectRatio: '3 / 2',
-                  overflow: 'auto',
-                }}
-              >
-                <CardHeader
-                  title={item.listNameToUser}
-                  subheader={`Author: ${item.author}`}
-                />
-                <CardContent>
-                  <List
-                    sx={{
-                      width: '100%',
-                      bgcolor: 'background.paper',
-                      mb: 3,
-                    }}
-                  >
-                    {item.tasks.map((task) => (
-                      <Zoom in={true} key={task.task_name}>
-                        <ListItem>
-                          <ListItemText
-                            sx={{ m: 0 }}
-                            primary={task.task_name}
-                            secondary={task.task_description}
-                          />
-                          <IconButton sx={{ textAlign: 'end' }}>
-                            <AccessTimeIcon />
-                          </IconButton>
-                        </ListItem>
-                      </Zoom>
-                    ))}
-                  </List>
-                </CardContent>
-              </Card>
-            ))}
-          </Box>
+          <Typography variant="h6">Tasks for: {user.first_name}</Typography>
+          {user.tasks_list.length ? (
+            <Box
+              component="div"
+              sx={{
+                mb: 3,
+                pb: 3,
+                pt: 3,
+                display: 'flex',
+                gap: '1em',
+                overflowX: 'auto',
+                minHeight: 400,
+                scrollSnapType: 'x mandatory',
+              }}
+            >
+              {user.tasks_list?.map((item) => (
+                <Card
+                  key={item.id}
+                  sx={{
+                    width: 'auto',
+                    maxWidth: 300,
+                    scrollSnapAlign: 'start',
+                    flexShrink: 0,
+                    aspectRatio: '3 / 2',
+                    overflow: 'auto',
+                    position: 'relative',
+                  }}
+                >
+                  {authUserEmail === item.author && (
+                    <IconButton
+                      sx={{
+                        position: 'absolute',
+                        right: '0.5rem',
+                        top: '0.8rem',
+                      }}
+                      color="error"
+                      onClick={() => handleDelete(user.id, item.id)}
+                    >
+                      <DeleteOutlineIcon />
+                    </IconButton>
+                  )}
+                  <CardHeader
+                    title={item.listNameToUser}
+                    subheader={`Author: ${item.author}`}
+                  />
+                  <CardContent>
+                    <List
+                      sx={{
+                        width: '100%',
+                        bgcolor: 'background.paper',
+                        mb: 3,
+                      }}
+                    >
+                      {item.tasks.map((task) => (
+                        <Zoom in={true} key={task.task_name}>
+                          <ListItem>
+                            <ListItemText
+                              sx={{ m: 0 }}
+                              primary={task.task_name}
+                              secondary={task.task_description}
+                            />
+                            <IconButton
+                              sx={{ textAlign: 'end', pointerEvents: 'none' }}
+                            >
+                              {task.task_status === 'done' ? (
+                                <CheckCircleOutlineIcon color="success" />
+                              ) : (
+                                <AccessTimeIcon />
+                              )}
+                            </IconButton>
+                          </ListItem>
+                        </Zoom>
+                      ))}
+                    </List>
+                  </CardContent>
+                </Card>
+              ))}
+            </Box>
+          ) : (
+            <Alert sx={{ mt: 3 }} severity="info">
+              There are no task lists.
+            </Alert>
+          )}
         </Box>
       ))}
     </>
