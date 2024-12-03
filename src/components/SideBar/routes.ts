@@ -8,6 +8,10 @@ import { SvgIconComponent } from '@mui/icons-material';
 import RecentActorsIcon from '@mui/icons-material/RecentActors';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import EditCalendarIcon from '@mui/icons-material/EditCalendar';
+import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
+import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
+import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
+
 interface Route {
   path: string;
   label: string;
@@ -25,18 +29,35 @@ const routes: Route[] = [
     children: [
       {
         path: '/family-creating',
-        label: 'Creating',
+        label: 'Create & Assign',
         icon: NoteAddIcon,
       },
       {
         path: '/members-info',
-        label: 'Members info',
+        label: 'Members Info',
         icon: RecentActorsIcon,
       },
       {
         path: '/family-calendar',
-        label: 'Calendar',
+        label: 'Shared Calendar',
         icon: EditCalendarIcon,
+      },
+    ],
+  },
+  {
+    path: '/task-overview',
+    label: 'Task overview',
+    icon: FormatListNumberedIcon,
+    children: [
+      {
+        path: '/task-creating',
+        label: 'Create & Assign',
+        icon: PlaylistAddIcon,
+      },
+      {
+        path: '/my-tasks',
+        label: 'My Tasks',
+        icon: PlaylistAddCheckIcon,
       },
     ],
   },

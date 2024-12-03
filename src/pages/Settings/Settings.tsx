@@ -7,7 +7,7 @@ import { ThemeToggle, ThemeColorEven } from '../../components';
 export const Settings = () => {
   const [inProgress, setInProgress] = useState(true);
   return (
-    <Page isHomePage>
+    <Page>
       <Typography
         variant="h4"
         gutterBottom

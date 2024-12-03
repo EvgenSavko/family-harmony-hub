@@ -2,7 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { auth, db } from '../../../../firebase';
 import { getDoc, getDocs, doc, collection } from 'firebase/firestore';
 import { FirebaseError } from 'firebase/app';
-import { Typography, LinearProgress, Box } from '@mui/material';
+import {
+  Typography,
+  AlertTitle,
+  Alert,
+  LinearProgress,
+  Box,
+} from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { FamilyDataProps } from '../../../../shared';
 import { getUserFromFirebase } from '../../../../shared';
@@ -110,10 +116,10 @@ export const MyFamily = ({
         pl={{ xs: 2, md: 3 }}
         pr={{ xs: 2, md: 3 }}
       >
-        <Typography variant="h5">You don`t have family yet.</Typography>
-        <Typography variant="subtitle1">
+        <Alert severity="info">
+          <AlertTitle>You don`t have family yet.</AlertTitle>
           Create your own family or ask to be assigned.
-        </Typography>
+        </Alert>
       </Grid>
     );
 

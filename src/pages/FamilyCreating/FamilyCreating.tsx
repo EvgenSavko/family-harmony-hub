@@ -54,7 +54,7 @@ export const FamilyCreating = () => {
           <Typography variant="h5">Start your own little tribe</Typography>
         </Grid>
       </Paper>
-      <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
+      <Box sx={{ width: '100%', bgcolor: 'background.paper', mt: 1, mb: 0.5 }}>
         <Tabs
           value={tabIndex}
           onChange={handleChange}

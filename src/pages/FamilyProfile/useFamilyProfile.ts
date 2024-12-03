@@ -7,17 +7,19 @@ import {
 } from '../../shared';
 import { auth } from '../../firebase';
 
+type ExpandedIndexType = Record<number, boolean>;
+
 export const useFamilyProfile = () => {
   const [familyId, setFamilyId] = useState('');
   const [inProgress, setInProgress] = useState(false);
-  const [expandedIndex, setExpandedIndex] = useState(-1);
+  const [expandedIndex, setExpandedIndex] = useState<ExpandedIndexType>({});
   const [isFamilyOwner, setIsFamilyOwner] = useState(false);
   const [familyMembersEmails, setFamilyMembersEmails] = useState([]);
   const [familyMembers, setFamilyMembers] = useState<UserStateApi[]>([]);
   const navigate = useNavigate();
 
-  const handleExpandClick = (index: number, isExpanded: boolean) => {
-    setExpandedIndex(isExpanded ? -1 : index);
+  const handleExpandClick = (index: number) => {
+    setExpandedIndex({ ...expandedIndex, [index]: !expandedIndex[index] });
   };
 
   const handleAddMember = () => {
