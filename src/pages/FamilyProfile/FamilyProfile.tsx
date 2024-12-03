@@ -112,20 +112,19 @@ export const FamilyProfile = () => {
                     <strong>Address ZIP/Posta:</strong> {user.address}
                   </Typography>
                 </CardContent>
+
                 <CardActions sx={{ pt: 0, pb: 0 }}>
                   <ExpandMore
-                    expand={expandedIndex === index}
-                    onClick={() =>
-                      handleExpandClick(index, expandedIndex === index)
-                    }
-                    aria-expanded={expandedIndex === index}
+                    expand={!!expandedIndex[index]}
+                    onClick={() => handleExpandClick(index)}
+                    aria-expanded={!!expandedIndex[index]}
                     aria-label="show more"
                   >
                     <ExpandMoreIcon />
                   </ExpandMore>
                 </CardActions>
                 <Collapse
-                  in={expandedIndex === index}
+                  in={!!expandedIndex[index]}
                   timeout="auto"
                   unmountOnExit
                 >
