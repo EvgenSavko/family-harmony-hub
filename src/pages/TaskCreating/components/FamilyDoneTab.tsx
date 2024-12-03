@@ -21,9 +21,9 @@ import Grid from '@mui/material/Grid2';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import { UserTasksList } from '../../../shared';
+import { UserTasksList, TaskState } from '../../../shared';
 
-export const AssignedToFamily = () => {
+export const FamilyDoneTab = () => {
   const [inProgress, setInProgress] = useState(true);
   const [taskListsOfMembers, setTaskListsOfMembers] = useState<UserTasksList[]>(
     []
@@ -102,15 +102,23 @@ export const AssignedToFamily = () => {
     setInProgress(false);
   };
 
+  const filteredTaskListsOfMembers = taskListsOfMembers.map((item) => {
+    const filteredTasksLists = [...(item?.tasks_list || [])].filter((item) => {
+      return item.tasks.every((task: TaskState) => task.task_status === 'done');
+    });
+
+    return { ...item, tasks_list: filteredTasksLists };
+  });
+
   return (
     <>
       <Paper elevation={1} sx={{ mb: 3 }}>
         <Box>{inProgress && <LinearProgress />}</Box>
         <Grid size={12} p={{ xs: 1, md: 2 }} pl={{ xs: 2, md: 3 }}>
-          <Typography variant="h5">Assigned to family members:</Typography>
+          Completed tasks lists by family members.
         </Grid>
       </Paper>
-      {taskListsOfMembers.map((user) => (
+      {filteredTaskListsOfMembers.map((user) => (
         <Box key={user.id} sx={{ mb: 3 }}>
           <Typography variant="h6">Tasks for: {user.first_name}</Typography>
           {user.tasks_list.length ? (
@@ -192,7 +200,7 @@ export const AssignedToFamily = () => {
             </Box>
           ) : (
             <Alert sx={{ mt: 3 }} severity="info">
-              There are no task lists.
+              There are no completed task lists.
             </Alert>
           )}
         </Box>
