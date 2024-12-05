@@ -1,4 +1,4 @@
-import { useState, useEffect, KeyboardEvent, useRef } from 'react';
+import { useState, useEffect, ChangeEvent, KeyboardEvent, useRef } from 'react';
 import { Page } from '../../components';
 import { doc, updateDoc } from 'firebase/firestore';
 import { Link as NavLnk } from 'react-router-dom';
@@ -15,7 +15,12 @@ import {
   Link,
   DialogTitle,
   TextField,
+  FormGroup,
+  FormControlLabel,
+  useMediaQuery,
+  Checkbox,
 } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import moment from 'moment';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import { nationalEvents } from './data';
@@ -75,10 +80,17 @@ export const FamilyCalendar = () => {
   const [eventsData, setEventsData] = useState<Event[]>([]);
   const [openEvent, setOpenEvent] = useState<Event | null>(null);
   const [openDialog, setOpenDialog] = useState(false);
+  const [openFullDialog, setOpenFullDialog] = useState(false);
   const [eventName, setEventName] = useState('');
   const [eventDateStart, setEventDateStart] = useState<SelectDate | null>(null);
   const [inProgress, setInProgress] = useState(true);
   const [colorEventList, setColorEventList] = useState<ColorEvent[]>([]);
+  const [startEvent, setStartEvent] = useState('');
+  const [endEvent, setEndEvent] = useState('');
+  const [withStartTime, setWithStartTime] = useState('date');
+  const [withEndTime, setWithEndTime] = useState('date');
+
+  const isMobile = useMediaQuery('(max-width:600px)');
 
   const theme = useTheme();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -167,6 +179,7 @@ export const FamilyCalendar = () => {
     }
 
     setOpenDialog(false);
+    setOpenFullDialog(false);
   };
 
   const handleDelete = async () => {
@@ -321,6 +334,109 @@ export const FamilyCalendar = () => {
           />
         </Box>
       </Dialog>
+      <Dialog open={openFullDialog} onClose={handleCloseDialog}>
+        <Grid container pt={1} p={3}>
+          <DialogTitle>Set new event to calendar</DialogTitle>
+          <Grid size={12}>
+            <TextField
+              label="Event name"
+              value={eventName}
+              onChange={(e) => setEventName(e.target.value)}
+              variant="outlined"
+              onKeyDown={(event: KeyboardEvent<HTMLInputElement>) => {
+                if (event.key === 'Enter') {
+                  const inputValue = (event.target as HTMLInputElement).value;
+                  handleCloseDialog(inputValue, 'Enter');
+                }
+              }}
+              fullWidth
+              inputRef={inputRef}
+              sx={{ mb: 3 }}
+            />
+          </Grid>
+
+          <Grid size={12}>
+            <Grid container spacing={2}>
+              <Grid size={{ xs: 12, sm: 9 }}>
+                <TextField
+                  label="Start event"
+                  type={withStartTime}
+                  variant="outlined"
+                  fullWidth
+                  value={startEvent}
+                  onChange={(
+                    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+                  ) => {
+                    setStartEvent(e.target.value);
+                    setEventDateStart((prev: any) => ({
+                      ...prev,
+                      start: moment(e.target.value).toDate(),
+                    }));
+                  }}
+                  sx={{ mb: 3 }}
+                />
+              </Grid>
+              <Grid size={{ xs: 12, sm: 3 }}>
+                <FormGroup>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={withStartTime !== 'date'}
+                        onChange={() =>
+                          setWithStartTime((prev) =>
+                            prev === 'date' ? 'datetime-local' : 'date'
+                          )
+                        }
+                      />
+                    }
+                    label="With time"
+                  />
+                </FormGroup>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid size={12}>
+            <Grid container spacing={2}>
+              <Grid size={{ xs: 12, sm: 9 }}>
+                <TextField
+                  label="End event"
+                  type={withEndTime}
+                  variant="outlined"
+                  fullWidth
+                  value={endEvent}
+                  onChange={(
+                    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+                  ) => {
+                    setEndEvent(e.target.value);
+                    setEventDateStart((prev: any) => ({
+                      ...prev,
+                      end: moment(e.target.value).toDate(),
+                    }));
+                  }}
+                />
+              </Grid>
+              <Grid size={{ xs: 12, sm: 3 }}>
+                <FormGroup>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={withEndTime !== 'date'}
+                        onChange={() =>
+                          setWithEndTime((prev) =>
+                            prev === 'date' ? 'datetime-local' : 'date'
+                          )
+                        }
+                      />
+                    }
+                    label="With time"
+                  />
+                </FormGroup>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Dialog>
+
       <Typography
         variant="h4"
         color="primary"
@@ -344,19 +460,33 @@ export const FamilyCalendar = () => {
             <LinearProgress sx={{ position: 'absolute', width: '100%' }} />
           )}
         </Box>
-
-        <Calendar
-          views={['day', 'agenda', 'work_week', 'month']}
-          selectable
-          localizer={localizer}
-          defaultDate={new Date()}
-          defaultView="month"
-          events={[...eventsData, ...nationalEvents]}
-          style={{ height: '100vh' }}
-          onSelectEvent={handleSelectEvent}
-          onSelectSlot={handleSelect}
-          eventPropGetter={eventPropGetter}
-        />
+        <Box sx={{ position: 'relative' }}>
+          <Calendar
+            views={['day', 'agenda', 'work_week', 'month']}
+            selectable
+            localizer={localizer}
+            defaultDate={new Date()}
+            defaultView="month"
+            events={[...eventsData, ...nationalEvents]}
+            style={{ height: '100vh' }}
+            onSelectEvent={handleSelectEvent}
+            onSelectSlot={handleSelect}
+            eventPropGetter={eventPropGetter}
+          />
+          <Button
+            sx={{
+              zIndex: 4,
+              position: 'fixed',
+              bottom: 30,
+              left: isMobile ? '25%' : '50%',
+            }}
+            size="large"
+            variant="contained"
+            onClick={() => setOpenFullDialog(true)}
+          >
+            Add event to calendar
+          </Button>
+        </Box>
       </Box>
     </Page>
   );

@@ -11,14 +11,19 @@ import {
   FormControl,
   Select,
   LinearProgress,
+  Divider,
   TextField,
   SelectChangeEvent,
+  Alert,
   useMediaQuery,
   Button,
   ListItemAvatar,
   ListItem,
   ListItemText,
   List,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
   IconButton,
 } from '@mui/material';
 import Grid from '@mui/material/Grid2';
@@ -41,6 +46,7 @@ export const CreatingTab = () => {
   const [familyMembers, setFamilyMembers] = useState<string[]>([]);
   const [assignToUser, setAssignToUser] = useState('');
   const [listNameToUser, setListNameToUser] = useState('');
+  const [isPrivate, setIsPrivate] = useState(false);
   const isMobile = useMediaQuery('(max-width:600px)');
 
   const handleAddTask = () => {
@@ -48,6 +54,11 @@ export const CreatingTab = () => {
     setTaskListState((prev) => [newTask, ...prev]);
     setTaskState(defaultTaskState);
   };
+
+  useEffect(() => {
+    if (isPrivate && auth.currentUser?.email)
+      setAssignToUser(auth.currentUser?.email);
+  }, [isPrivate]);
 
   const handleChange = (
     name: string,
@@ -67,6 +78,7 @@ export const CreatingTab = () => {
         listNameToUser: listNameToUser,
         author: auth.currentUser?.email,
         id: Date.now(),
+        is_private: isPrivate,
       };
 
       const docUsersRef = doc(db, 'users', assignToUser);
@@ -148,7 +160,9 @@ export const CreatingTab = () => {
                       padding: !taskListState.length ? 'auto' : '0px',
                     }}
                   >
-                    <ListItemText primary="Create a new list of tasks" />
+                    <Alert sx={{ width: '100%' }} severity="info">
+                      Create a new list of tasks
+                    </Alert>
                   </ListItem>
                 </Zoom>
                 {taskListState.map((item) => (
@@ -175,6 +189,58 @@ export const CreatingTab = () => {
         </Grid>
         <Grid size={{ xs: 12, md: 6 }}>
           <Grid container spacing={2} p={{ xs: 2, md: 3 }} direction={'column'}>
+            <Grid size={{ xs: 12 }}>
+              <TextField
+                name="Outlined"
+                placeholder="Type the list name..."
+                variant="outlined"
+                label="Task list name"
+                fullWidth
+                value={listNameToUser}
+                onChange={(e) => setListNameToUser(e.target.value)}
+              />
+            </Grid>
+
+            <Grid container alignItems={'center'}>
+              <Grid size={{ xs: 12, sm: 7 }}>
+                <FormControl fullWidth>
+                  <InputLabel id="user-email-label">Select user</InputLabel>
+                  <Select
+                    labelId="user-email-label"
+                    id="user-email-select"
+                    value={assignToUser}
+                    label="Select user"
+                    disabled={isPrivate}
+                    onChange={(e) => setAssignToUser(e.target.value)}
+                  >
+                    {familyMembers.map((type) => (
+                      <MenuItem key={type} value={type}>
+                        {type}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid
+                size={{ xs: 12, sm: 5 }}
+                display="flex"
+                justifyContent={'end'}
+              >
+                <FormGroup>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={isPrivate}
+                        onChange={() => setIsPrivate((prev) => !prev)}
+                      />
+                    }
+                    label="Private list"
+                  />
+                </FormGroup>
+              </Grid>
+            </Grid>
+
+            <Divider />
             <Grid size={{ xs: 12 }}>
               <TextField
                 name="Outlined"
@@ -212,35 +278,8 @@ export const CreatingTab = () => {
                 <Box ml={1}>Add task to list</Box>
               </Button>
             </Grid>
-            <Grid size={{ xs: 12 }}>
-              <FormControl fullWidth>
-                <InputLabel id="user-email-label">Select user</InputLabel>
-                <Select
-                  labelId="user-email-label"
-                  id="user-email-select"
-                  value={assignToUser}
-                  label="Select user"
-                  onChange={(e) => setAssignToUser(e.target.value)}
-                >
-                  {familyMembers.map((type) => (
-                    <MenuItem key={type} value={type}>
-                      {type}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid size={{ xs: 12 }}>
-              <TextField
-                name="Outlined"
-                placeholder="Type the list name..."
-                variant="outlined"
-                label="Task list name"
-                fullWidth
-                value={listNameToUser}
-                onChange={(e) => setListNameToUser(e.target.value)}
-              />
-            </Grid>
+            <Divider />
+
             <Grid size={{ xs: 12 }} display="flex" justifyContent={'end'}>
               <Button
                 size="medium"

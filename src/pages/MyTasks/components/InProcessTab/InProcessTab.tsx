@@ -80,6 +80,15 @@ export const InProcessTab = () => {
     // Get family members to set options to selector
   }, [authUserEmail]);
 
+  const filterTasksList = (array: TaskAssignment[]) => {
+    const filteredTasksLists = [...(array || [])].filter((item) => {
+      return !item.tasks.every(
+        (task: TaskState) => task.task_status === 'done'
+      );
+    });
+    return filteredTasksLists;
+  };
+
   return (
     <>
       <Paper elevation={1}>
@@ -90,12 +99,12 @@ export const InProcessTab = () => {
       </Paper>
 
       <Grid container mt={3} spacing={3}>
-        {taskLists.length === 0 && (
+        {filterTasksList(taskLists).length === 0 && (
           <Alert sx={{ mt: 1 }} severity="info">
             There are no task lists.
           </Alert>
         )}
-        {taskLists.map((item) => (
+        {filterTasksList(taskLists).map((item) => (
           <Grid size={{ lg: 4, sm: 6, xs: 12 }} key={item.id}>
             <Card
               key={item.id}
