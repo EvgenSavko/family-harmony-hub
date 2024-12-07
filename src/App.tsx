@@ -1,7 +1,7 @@
-import React from 'react';
 import './App.css';
 import { MainContent } from './components/index';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { CoreContextProvider } from './shared';
 
 const theme = createTheme({
   colorSchemes: {
@@ -12,7 +12,9 @@ const theme = createTheme({
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <MainContent />
+      <CoreContextProvider>
+        <MainContent />
+      </CoreContextProvider>
     </ThemeProvider>
   );
 }

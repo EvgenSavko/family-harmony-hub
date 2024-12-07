@@ -19,13 +19,6 @@ import { useSideBar } from './SideBar.hooks';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 
-const fabStyle = {
-  position: 'fixed',
-  bottom: '2rem',
-  right: '1.5rem',
-  zIndex: 1051,
-};
-
 export const SideBarMobileV2 = () => {
   const {
     isOpenDrawer,
@@ -36,7 +29,16 @@ export const SideBarMobileV2 = () => {
     handleNavigateTo,
     openNavCollapse,
     handleNavCollapse,
+    menuPosition,
   } = useSideBar();
+
+  const fabStyle = {
+    position: 'fixed',
+    bottom: '2rem',
+    right: menuPosition === 'right' ? '1.5rem' : 'auto',
+    left: menuPosition === 'left' ? '1.5rem' : 'auto',
+    zIndex: 1051,
+  };
 
   return (
     <>
@@ -51,7 +53,11 @@ export const SideBarMobileV2 = () => {
           <MenuIcon /> <Box ml={1}>Menu</Box>
         </Fab>
       </Zoom>
-      <Drawer anchor="right" open={isOpenDrawer} onClose={toggleDrawer(false)}>
+      <Drawer
+        anchor={menuPosition}
+        open={isOpenDrawer}
+        onClose={toggleDrawer(false)}
+      >
         <Box
           sx={{
             width: 250,

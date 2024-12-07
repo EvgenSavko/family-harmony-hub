@@ -139,7 +139,6 @@ export const AssignedToFamily = () => {
                 display: 'flex',
                 gap: '1em',
                 overflowX: 'auto',
-                // minHeight: 400,
                 scrollSnapType: 'x mandatory',
               }}
             >
@@ -177,7 +176,11 @@ export const AssignedToFamily = () => {
                   {item.is_private && (
                     <CardContent sx={{ pt: 0, pb: 0 }}>
                       <Tooltip title="This list of tasks visible only for you.">
-                        <Badge badgeContent={'?'} color="primary">
+                        <Badge
+                          badgeContent={'?'}
+                          color="primary"
+                          sx={{ right: '-10px' }}
+                        >
                           <Typography
                             variant="caption"
                             sx={(theme) => ({

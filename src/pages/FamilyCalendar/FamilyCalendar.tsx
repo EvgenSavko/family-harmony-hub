@@ -356,8 +356,8 @@ export const FamilyCalendar = () => {
           </Grid>
 
           <Grid size={12}>
-            <Grid container spacing={2}>
-              <Grid size={{ xs: 12, sm: 9 }}>
+            <Grid container spacing={{ xs: 0, md: 2 }} mb={{ xs: 2, md: 0 }}>
+              <Grid size={{ xs: 12, sm: 8 }}>
                 <TextField
                   label="Start event"
                   type={withStartTime}
@@ -373,10 +373,10 @@ export const FamilyCalendar = () => {
                       start: moment(e.target.value).toDate(),
                     }));
                   }}
-                  sx={{ mb: 3 }}
+                  sx={{ marginBottom: { xs: 0, sm: 3 } }}
                 />
               </Grid>
-              <Grid size={{ xs: 12, sm: 3 }}>
+              <Grid size={{ xs: 12, sm: 4 }}>
                 <FormGroup>
                   <FormControlLabel
                     control={
@@ -389,15 +389,15 @@ export const FamilyCalendar = () => {
                         }
                       />
                     }
-                    label="With time"
+                    label="Start event time"
                   />
                 </FormGroup>
               </Grid>
             </Grid>
           </Grid>
           <Grid size={12}>
-            <Grid container spacing={2}>
-              <Grid size={{ xs: 12, sm: 9 }}>
+            <Grid container spacing={{ xs: 0, md: 2 }}>
+              <Grid size={{ xs: 12, sm: 8 }}>
                 <TextField
                   label="End event"
                   type={withEndTime}
@@ -413,9 +413,10 @@ export const FamilyCalendar = () => {
                       end: moment(e.target.value).toDate(),
                     }));
                   }}
+                  sx={{ marginBottom: { xs: 0, sm: 3 } }}
                 />
               </Grid>
-              <Grid size={{ xs: 12, sm: 3 }}>
+              <Grid size={{ xs: 12, sm: 4 }}>
                 <FormGroup>
                   <FormControlLabel
                     control={
@@ -428,7 +429,7 @@ export const FamilyCalendar = () => {
                         }
                       />
                     }
-                    label="With time"
+                    label="End event time"
                   />
                 </FormGroup>
               </Grid>
@@ -478,13 +479,13 @@ export const FamilyCalendar = () => {
               zIndex: 4,
               position: 'fixed',
               bottom: 30,
-              left: isMobile ? '25%' : '50%',
+              left: isMobile ? '30%' : '50%',
             }}
             size="large"
             variant="contained"
             onClick={() => setOpenFullDialog(true)}
           >
-            Add event to calendar
+            {isMobile ? 'Add event' : 'Add event to calendar'}
           </Button>
         </Box>
       </Box>
