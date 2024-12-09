@@ -23,6 +23,11 @@ const routes: Route[] = [
   { path: '/home', label: 'Home', icon: HomeIcon },
   { path: '/profile', label: 'Profile', icon: ContactPageIcon },
   {
+    path: '/family-calendar',
+    label: 'Shared Calendar',
+    icon: EditCalendarIcon,
+  },
+  {
     path: '/family-profile',
     label: 'Family overview',
     icon: FolderSharedIcon,
@@ -36,11 +41,6 @@ const routes: Route[] = [
         path: '/members-info',
         label: 'Members Info',
         icon: RecentActorsIcon,
-      },
-      {
-        path: '/family-calendar',
-        label: 'Shared Calendar',
-        icon: EditCalendarIcon,
       },
     ],
   },

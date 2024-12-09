@@ -10,6 +10,7 @@ export interface TaskAssignment {
   tasks: TaskState[];
   id: number;
   listNameToUser: string;
+  is_private?: boolean;
 }
 
 export interface UserTasksList {

@@ -13,15 +13,17 @@ import {
   List,
   ListItemText,
   LinearProgress,
+  Badge,
   ListItem,
   IconButton,
   Zoom,
+  Tooltip,
 } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import { UserTasksList } from '../../../shared';
+import { UserTasksList, TaskAssignment, TaskState } from '../../../shared';
 
 export const AssignedToFamily = () => {
   const [inProgress, setInProgress] = useState(true);
@@ -102,6 +104,20 @@ export const AssignedToFamily = () => {
     setInProgress(false);
   };
 
+  const filterTasksList = (array: TaskAssignment[]) => {
+    const filteredTasksLists = [...(array || [])].filter((item) => {
+      return !item.tasks.every(
+        (task: TaskState) => task.task_status === 'done'
+      );
+    });
+    return [...filteredTasksLists].filter((item) => {
+      if (!item.is_private) return true;
+      if (item.is_private) {
+        return item.author === auth.currentUser?.email;
+      }
+    });
+  };
+
   return (
     <>
       <Paper elevation={1} sx={{ mb: 3 }}>
@@ -123,16 +139,16 @@ export const AssignedToFamily = () => {
                 display: 'flex',
                 gap: '1em',
                 overflowX: 'auto',
-                minHeight: 400,
                 scrollSnapType: 'x mandatory',
               }}
             >
-              {user.tasks_list?.map((item) => (
+              {filterTasksList(user.tasks_list)?.map((item) => (
                 <Card
                   key={item.id}
                   sx={{
                     width: 'auto',
                     maxWidth: 300,
+                    minHeight: 400,
                     scrollSnapAlign: 'start',
                     flexShrink: 0,
                     aspectRatio: '3 / 2',
@@ -157,6 +173,27 @@ export const AssignedToFamily = () => {
                     title={item.listNameToUser}
                     subheader={`Author: ${item.author}`}
                   />
+                  {item.is_private && (
+                    <CardContent sx={{ pt: 0, pb: 0 }}>
+                      <Tooltip title="This list of tasks visible only for you.">
+                        <Badge
+                          badgeContent={'?'}
+                          color="primary"
+                          sx={{ right: '-10px' }}
+                        >
+                          <Typography
+                            variant="caption"
+                            sx={(theme) => ({
+                              color: theme.palette.primary.main,
+                            })}
+                          >
+                            In private mode
+                          </Typography>
+                        </Badge>
+                      </Tooltip>
+                    </CardContent>
+                  )}
+
                   <CardContent>
                     <List
                       sx={{

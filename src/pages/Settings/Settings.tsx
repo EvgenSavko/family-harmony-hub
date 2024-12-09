@@ -2,7 +2,11 @@ import { Page } from '../../components';
 import { useState } from 'react';
 import { Typography, Paper, Box, LinearProgress } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { ThemeToggle, ThemeColorEven } from '../../components';
+import {
+  ThemeToggle,
+  ThemeColorEven,
+  MenuPositionToggle,
+} from '../../components';
 
 export const Settings = () => {
   const [inProgress, setInProgress] = useState(true);
@@ -25,6 +29,9 @@ export const Settings = () => {
         </Grid>
         <Grid size={12} p={{ xs: 1, md: 2 }} pl={{ xs: 2, md: 3 }}>
           <ThemeColorEven setInProgress={setInProgress} />
+        </Grid>
+        <Grid size={12} p={{ xs: 1, md: 2 }} pl={{ xs: 2, md: 3 }}>
+          <MenuPositionToggle />
         </Grid>
       </Paper>
     </Page>

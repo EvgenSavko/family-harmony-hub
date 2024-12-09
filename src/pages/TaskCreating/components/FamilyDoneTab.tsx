@@ -131,7 +131,6 @@ export const FamilyDoneTab = () => {
                 display: 'flex',
                 gap: '1em',
                 overflowX: 'auto',
-                minHeight: 400,
                 scrollSnapType: 'x mandatory',
               }}
             >
@@ -141,6 +140,7 @@ export const FamilyDoneTab = () => {
                   sx={{
                     width: 'auto',
                     maxWidth: 300,
+                    minHeight: 400,
                     scrollSnapAlign: 'start',
                     flexShrink: 0,
                     aspectRatio: '3 / 2',

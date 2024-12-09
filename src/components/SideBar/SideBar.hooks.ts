@@ -1,8 +1,15 @@
-import { useState, KeyboardEvent, MouseEvent } from 'react';
+import {
+  useState,
+  useEffect,
+  KeyboardEvent,
+  MouseEvent,
+  useContext,
+} from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../firebase';
 import { useTheme } from '@mui/material/styles';
+import { CoreContext, getUserFromFirebase } from '../../shared';
 
 export const useSideBar = () => {
   const theme = useTheme();
@@ -11,9 +18,24 @@ export const useSideBar = () => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
 
+  const context = useContext(CoreContext);
+  if (!context) {
+    throw new Error('SomeComponent must be used within a CoreContextProvider');
+  }
+
+  const { state, setMenuPosition } = context;
+
   const handleNavCollapse = (path: string) => {
     setOpenNavCollapse((prev) => (prev && path === prev ? '' : path));
   };
+
+  useEffect(() => {
+    getUserFromFirebase().then((userData) => {
+      if (userData?.menu_position) {
+        setMenuPosition(userData?.menu_position);
+      }
+    });
+  }, [auth.currentUser?.email]);
 
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
 
@@ -60,5 +82,6 @@ export const useSideBar = () => {
     toggleDrawer,
     openNavCollapse,
     handleNavCollapse,
+    menuPosition: state.menuPosition,
   };
 };
