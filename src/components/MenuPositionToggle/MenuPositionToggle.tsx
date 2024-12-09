@@ -6,6 +6,8 @@ import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel from '@mui/material/FormLabel';
 import { CoreContext } from '../../shared';
+import { auth, db } from '../../firebase';
+import { doc, updateDoc } from 'firebase/firestore';
 
 export const MenuPositionToggle = () => {
   const context = useContext(CoreContext);
@@ -14,6 +16,16 @@ export const MenuPositionToggle = () => {
   }
 
   const { state, setMenuPosition } = context;
+
+  const updateUserConfig = async (position: string) => {
+    if (auth.currentUser?.email) {
+      const docUsersRef = doc(db, 'users', auth.currentUser?.email);
+
+      await updateDoc(docUsersRef, {
+        menu_position: position,
+      });
+    }
+  };
 
   return (
     <Box
@@ -33,9 +45,10 @@ export const MenuPositionToggle = () => {
           name="theme-toggle"
           row
           value={state.menuPosition}
-          onChange={(event) =>
-            setMenuPosition(event.target.value as 'left' | 'right')
-          }
+          onChange={(event) => {
+            setMenuPosition(event.target.value as 'left' | 'right');
+            updateUserConfig(event.target.value);
+          }}
         >
           <FormControlLabel value="left" control={<Radio />} label="Left" />
           <FormControlLabel value="right" control={<Radio />} label="Right" />
